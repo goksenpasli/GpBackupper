@@ -7,8 +7,7 @@
     Title="Yedekleyici"
     Width="800" Height="480"
     d:DataContext="{d:DesignInstance Type={x:Type local:MainViewModel}}"
-    Icon="/GpBackupper;component/icon.ico" UseLayoutRounding="True" WindowStartupLocation="CenterScreen"
-    WindowState="Maximized"
+    UseLayoutRounding="True" WindowStartupLocation="CenterScreen" WindowState="Maximized"
     mc:Ignorable="d">
     <Window.Resources>
         <Extensions:FilePathToFileDescriptionConverter x:Key="FilePathToFileDescriptionConverter" />
