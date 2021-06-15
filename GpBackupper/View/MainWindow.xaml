@@ -12,6 +12,13 @@
     <Window.Resources>
         <Extensions:FilePathToFileDescriptionConverter x:Key="FilePathToFileDescriptionConverter" />
         <Extensions:FilePathToIconConverter x:Key="FilePathToIconConverter" />
+        <local:DriveConverter x:Key="DriveConverter" />
+        <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
+            <ObjectDataProvider.ObjectInstance>
+                <local:TreeViewModel />
+            </ObjectDataProvider.ObjectInstance>
+        </ObjectDataProvider>
+        <HierarchicalDataTemplate ItemsSource="{Binding Path=SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -85,22 +92,16 @@
                             </ListBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="YEDEKLENECEK KLASÖRLER"
-                        Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                        <GroupBox.Header>
+                            <ComboBox x:Name="CbDrive" ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedIndex="0" />
+                        </GroupBox.Header>
                         <Grid>
-                            <Grid.Resources>
-                                <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
-                                    <ObjectDataProvider.ObjectInstance>
-                                        <local:TreeViewModel />
-                                    </ObjectDataProvider.ObjectInstance>
-                                </ObjectDataProvider>
-                                <HierarchicalDataTemplate ItemsSource="{Binding Path=SubFolders}" DataType="{x:Type local:TreeViewModel}" />
-                            </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TreeView ItemsSource="{Binding Path=SubFolders, Source={StaticResource FolderDataProvider}}">
+                            <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}">
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
                                         <StackPanel Orientation="Horizontal">

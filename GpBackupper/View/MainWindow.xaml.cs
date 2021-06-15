@@ -12,9 +12,5 @@ namespace GpBackupper
             InitializeComponent();
             DataContext = new MainViewModel();
         }
-
-        private void Compressor_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-        }
     }
 }
