@@ -17,7 +17,8 @@ namespace GpBackupper
                 try
                 {
                     TreeViewModel treeView = new();
-                    DirectoryInfo[] di = new DirectoryInfo(drive)?.GetDirectories();
+                    treeView.Folder = new DirectoryInfo(drive);
+                    DirectoryInfo[] di = treeView.Folder?.GetDirectories();
                     for (int i = 0; i < di?.Length; i++)
                     {
                         TreeViewModel newFolder = new();
@@ -42,7 +43,7 @@ namespace GpBackupper
     {
         private List<TreeViewModel> _subFolders;
 
-        private IEnumerable<string> drives = DriveInfo.GetDrives().Where(z => z.DriveType == DriveType.Fixed).Select(z => z.Name);
+        private IEnumerable<string> drives = DriveInfo.GetDrives().Select(z => z.Name);
 
         private DirectoryInfo folder = new(@"C:\");
 
