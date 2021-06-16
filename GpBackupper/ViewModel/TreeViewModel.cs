@@ -50,6 +50,7 @@ namespace GpBackupper
         private string fullPath;
 
         private string name;
+        private bool ısChecked;
 
         public IEnumerable<string> Drives
         {
@@ -104,6 +105,20 @@ namespace GpBackupper
                 {
                     name = value;
                     OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        public bool IsChecked
+        {
+            get => ısChecked;
+
+            set
+            {
+                if (ısChecked != value)
+                {
+                    ısChecked = value;
+                    OnPropertyChanged(nameof(IsChecked));
                 }
             }
         }

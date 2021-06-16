@@ -36,9 +36,17 @@ namespace GpBackupper
 
             AddBackupFolder = new RelayCommand<object>(parameter =>
             {
-                if (parameter is TreeViewModel treeViewModel && !Data.BackupFolders.Any(z => z.FolderName == treeViewModel.Folder.FullName))
+                if (parameter is TreeViewModel treeViewModel)
                 {
-                    Data.BackupFolders.Add(new Data() { FolderName = treeViewModel.Folder.FullName });
+                    if (treeViewModel.IsChecked)
+                    {
+                        Data data = new() { FolderName = treeViewModel.Folder.FullName };
+                        Data.BackupFolders.Add(data);
+                    }
+                    else
+                    {
+                        Data.BackupFolders.RemoveAt(0);
+                    }
                 }
             }, parameter => true);
 
@@ -98,11 +106,7 @@ namespace GpBackupper
                     {
                         System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     }
-                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ =>
-                {
-                    compressorViewModel.CompressorView.Dosyalar.Clear();
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ => compressorViewModel.CompressorView.Dosyalar.Clear(), TaskScheduler.FromCurrentSynchronizationContext());
             }, parameter => Data.BackupExtensions.Any() && Data.BackupFolders.Any() && !string.IsNullOrWhiteSpace(Data.DataSavePath));
 
             RemoveFileExtension = new RelayCommand<object>(parameter =>

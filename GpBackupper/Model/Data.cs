@@ -1,8 +1,10 @@
 ﻿using Extensions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
 namespace GpBackupper.View
 {
@@ -25,6 +27,8 @@ namespace GpBackupper.View
         private string extension;
 
         private int fileSize;
+
+        private IEnumerable<object> folderExtensions;
 
         private int folderFileCount;
 
@@ -161,6 +165,20 @@ namespace GpBackupper.View
             }
         }
 
+        public IEnumerable<object> FolderExtensions
+        {
+            get { return folderExtensions; }
+
+            set
+            {
+                if (folderExtensions != value)
+                {
+                    folderExtensions = value;
+                    OnPropertyChanged(nameof(FolderExtensions));
+                }
+            }
+        }
+
         public int FolderFileCount
         {
             get { return folderFileCount; }
@@ -186,7 +204,13 @@ namespace GpBackupper.View
                     folderName = value;
                     try
                     {
-                        FolderFileCount = Directory.GetFiles(folderName).Length;
+                        string[] files = Directory.GetFiles(folderName);
+                        FolderFileCount = files.Length;
+                        FolderExtensions = files.Select(z => Path.GetExtension(z).TrimStart('.').ToLower()).GroupBy(x => x, (ext, extCnt) => new
+                        {
+                            Extension = ext,
+                            Count = extCnt.Count()
+                        });
                     }
                     catch (UnauthorizedAccessException)
                     {

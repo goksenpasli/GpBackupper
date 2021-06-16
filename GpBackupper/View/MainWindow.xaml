@@ -101,16 +101,13 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}">
+                            <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}" d:DataContext="{d:DesignInstance Type=local:TreeViewModel}">
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Name}">
-                                                <Hyperlink Command="{Binding DataContext.AddBackupFolder, ElementName=Window}" CommandParameter="{Binding Mode=OneWay}">
-                                                    <Run Text=" EKLE" />
-                                                </Hyperlink>
-                                            </TextBlock>
-                                        </StackPanel>
+                                        <CheckBox Content="{Binding Name}"
+                                            Command="{Binding DataContext.AddBackupFolder, ElementName=Window}"
+                                            CommandParameter="{Binding Mode=OneWay}"
+                                            IsChecked="{Binding IsChecked}" />
                                     </HierarchicalDataTemplate>
                                 </TreeView.Resources>
                             </TreeView>
@@ -120,7 +117,18 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock>
                                                 <Run Text="{Binding FolderName}" />
-                                                <Run Text="{Binding FolderFileCount, StringFormat={}{0} Dosya Var}" Foreground="Red" />
+                                                <Run Text="{Binding FolderFileCount, StringFormat={}{0} Dosya Var}" Foreground="Red">
+                                                    <Run.ToolTip>
+                                                        <ListView ItemsSource="{Binding FolderExtensions}">
+                                                            <ListView.View>
+                                                                <GridView>
+                                                                    <GridViewColumn Header="UZANTI" DisplayMemberBinding="{Binding Extension}" />
+                                                                    <GridViewColumn Header="SAYI" DisplayMemberBinding="{Binding Count}" />
+                                                                </GridView>
+                                                            </ListView.View>
+                                                        </ListView>
+                                                    </Run.ToolTip>
+                                                </Run>
                                             </TextBlock>
                                         </StackPanel>
                                     </DataTemplate>
