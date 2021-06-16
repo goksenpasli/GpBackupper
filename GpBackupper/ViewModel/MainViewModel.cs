@@ -73,6 +73,17 @@ namespace GpBackupper
                     compressorViewModel.CompressorView.Dosyalar.Add(item);
                 }
 
+                void WriteData(IWriter writer)
+                {
+                    foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
+                    {
+                        writer.Write(Path.GetFileName(dosya), dosya);
+
+                        compressorViewModel.CompressorView.Oran++;
+                        compressorViewModel.CompressorView.DosyaAdı = Path.GetFileName(dosya);
+                    }
+                }
+
                 Task.Factory.StartNew(() =>
                 {
                     try
@@ -80,18 +91,17 @@ namespace GpBackupper
                         Data.Active = false;
                         using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
                         using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
-                        foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
-                        {
-                            writer.Write(Path.GetFileName(dosya), dosya);
-                            compressorViewModel.CompressorView.DosyaAdı = Path.GetFileName(dosya);
-                        }
+                        WriteData(writer);
                         Data.Active = true;
                     }
                     catch (Exception Ex)
                     {
                         System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     }
-                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ =>
+                {
+                    compressorViewModel.CompressorView.Dosyalar.Clear();
+                }, TaskScheduler.FromCurrentSynchronizationContext());
 
             }, parameter => Data.BackupExtensions.Any() && Data.BackupFolders.Any() && !string.IsNullOrWhiteSpace(Data.DataSavePath));
 
