@@ -29,10 +29,13 @@ namespace GpBackupper
                 {
                     foreach (string extension in fileextensions.Split(';'))
                     {
-                        Data.BackupExtensions.Add(new Data() { Extension = extension });
+                        if (!Data.BackupExtensions.Any(z => z.Extension == extension))
+                        {
+                            Data.BackupExtensions.Add(new Data() { Extension = extension });
+                        }
                     }
                 }
-            }, parameter => parameter is string fileextensions && !string.IsNullOrWhiteSpace(fileextensions));
+            }, parameter => parameter is string fileextensions && ((!string.IsNullOrEmpty(fileextensions) && fileextensions.StartsWith("*.")) || Data.CustomExtensions?.StartsWith("*.") == true));
 
             AddBackupFolder = new RelayCommand<object>(parameter =>
             {
@@ -98,8 +101,22 @@ namespace GpBackupper
                     {
                         Data.Active = false;
                         using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
-                        using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
-                        WriteData(writer);
+                        switch (Data.Biçim)
+                        {
+                            case 0:
+                                {
+                                    using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
+                                    WriteData(writer);
+                                    break;
+                                }
+
+                            case 1:
+                                {
+                                    using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
+                                    WriteData(writer);
+                                    break;
+                                }
+                        }
                         Data.Active = true;
                     }
                     catch (Exception Ex)

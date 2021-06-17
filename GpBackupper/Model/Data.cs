@@ -18,6 +18,8 @@ namespace GpBackupper.View
 
         private ObservableCollection<Data> backupfolders = new();
 
+        private int biçim;
+
         private string customExtensions;
 
         private string dataSavePath;
@@ -89,6 +91,20 @@ namespace GpBackupper.View
                 {
                     backupfolders = value;
                     OnPropertyChanged(nameof(BackupFolders));
+                }
+            }
+        }
+
+        public int Biçim
+        {
+            get => biçim;
+
+            set
+            {
+                if (biçim != value)
+                {
+                    biçim = value;
+                    OnPropertyChanged(nameof(Biçim));
                 }
             }
         }

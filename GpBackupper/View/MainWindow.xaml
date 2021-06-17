@@ -25,7 +25,7 @@
             <TabItem Header="YEDEKLEME">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
+                        <RowDefinition Height="2*" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -58,8 +58,8 @@
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding Data.CustomExtensions}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="ÖZEL UZANTILAR" />
-                                        <TextBox Text="{Binding Data.CustomExtensions}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
+                                        <TextBlock Text="ÖZEL UZANTILAR" VerticalAlignment="Center" />
+                                        <TextBox Text="{Binding Data.CustomExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
@@ -94,7 +94,10 @@
                     </GroupBox>
                     <GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <GroupBox.Header>
-                            <ComboBox x:Name="CbDrive" ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedIndex="0" />
+                            <ComboBox x:Name="CbDrive"
+                                Margin="1"
+                                ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}"
+                                SelectedIndex="0" />
                         </GroupBox.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -144,12 +147,42 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBox Text="{Binding Data.DataSavePath}" IsReadOnly="True" />
                             <Button Content="KAYIT KLASÖRÜ" Grid.Column="1" Command="{Binding SetSaveLocation}" />
+                            <ListBox Grid.Row="1" Grid.ColumnSpan="2"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                SelectedIndex="{Binding Data.Biçim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.Resources>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <RadioButton Content="{TemplateBinding ContentPresenter.Content}"
+                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                        IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.Resources>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBoxItem Content="ZIP"
+                                    VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                    IsSelected="True" ToolTip="Standart Sıkıştırma" />
+                                <ListBoxItem Content="LZMA ZIP"
+                                    VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                    ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
+                            </ListBox>
                             <Button Content="BAŞLAT"
-                                Grid.Row="1" Grid.ColumnSpan="2"
+                                Grid.Row="2" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"
                                 Command="{Binding StartCompress}" />
                         </Grid>

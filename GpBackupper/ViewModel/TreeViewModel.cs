@@ -43,14 +43,15 @@ namespace GpBackupper
     {
         private List<TreeViewModel> _subFolders;
 
-        private IEnumerable<string> drives = DriveInfo.GetDrives().Select(z => z.Name);
+        private IEnumerable<string> drives = DriveInfo.GetDrives().Where(z => z.DriveType == DriveType.Fixed).Select(z => z.Name);
 
         private DirectoryInfo folder = new(@"C:\");
 
         private string fullPath;
 
-        private string name;
         private bool ısChecked;
+
+        private string name;
 
         public IEnumerable<string> Drives
         {
@@ -95,20 +96,6 @@ namespace GpBackupper
             }
         }
 
-        public string Name
-        {
-            get => Folder.Name;
-
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
-        }
-
         public bool IsChecked
         {
             get => ısChecked;
@@ -119,6 +106,20 @@ namespace GpBackupper
                 {
                     ısChecked = value;
                     OnPropertyChanged(nameof(IsChecked));
+                }
+            }
+        }
+
+        public string Name
+        {
+            get => Folder.Name;
+
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
