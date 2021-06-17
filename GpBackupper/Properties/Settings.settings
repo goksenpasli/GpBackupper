@@ -1,7 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GpBackupper.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AudioExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.aac;*.ac3;*.aif;*.aifc;*.aiff;*.au;*.cda;*.dts;*.fla;*.flac;*.it;*.m1a;*.m2a;*.m3u;*.m4a;*.mid;*.midi;*.mka;*.mod;*.mp2;*.mp3;*.mpa;*.ogg;*.ra;*.rmi;*.spc;*.rmi;*.snd;*.umx;*.voc;*.wav;*.wma;*.xm</Value>
+    </Setting>
+    <Setting Name="DocumentExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.c;*.chm;*.cpp;*.csv;*.cxx;*.doc;*.docm;*.docx;*.dot;*.dotm;*.dotx;*.h;*.hpp;*.htm;*.html;*.hxx;*.ini;*.java;*.lua;*.mht;*.mhtml;*.odt;*.pdf;*.potx;*.potm;*.ppam;*.ppsm;*.ppsx;*.pps;*.ppt;*.pptm;*.pptx;*.rtf;*.sldm;*.sldx;*.thmx;*.txt;*.vsd;*.wpd;*.wps;*.wri;*.xlam;*.xls;*.xlsb;*.xlsm;*.xlsx;*.xltm;*.xltx;*.xml</Value>
+    </Setting>
+    <Setting Name="PictureExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.ani;*.bmp;*.gif;*.ico;*.jpe;*.jpeg;*.jpg;*.pcx;*.png;*.psd;*.tga;*.tif;*.tiff;*.webp;*.wmf</Value>
+    </Setting>
+    <Setting Name="VideoExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.3g2;*.3gp;*.3gp2;*.3gpp;*.amr;*.amv;*.asf;*.avi;*.bdmv;*.bik;*.d2v;*.divx;*.drc;*.dsa;*.dsm;*.dss;*.dsv;*.evo;*.f4v;*.flc;*.fli;*.flic;*.flv;*.hdmov;*.ifo;*.ivf;*.m1v;*.m2p;*.m2t;*.m2ts;*.m2v;*.m4b;*.m4p;*.m4v;*.mkv;*.mp2v;*.mp4;*.mp4v;*.mpe;*.mpeg;*.mpg;*.mpls;*.mpv2;*.mpv4;*.mov;*.mts;*.ogm;*.ogv;*.pss;*.pva;*.qt;*.ram;*.ratdvd;*.rm;*.rmm;*.rmvb;*.roq;*.rpm;*.smil;*.smk;*.swf;*.tp;*.tpr;*.ts;*.vob;*.vp6;*.webm;*.wm;*.wmp;*.wmv</Value>
+    </Setting>
+    <Setting Name="CustomExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
 </SettingsFile>

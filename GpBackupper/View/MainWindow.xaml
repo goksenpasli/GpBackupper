@@ -4,6 +4,7 @@
     xmlns:Extensions="clr-namespace:Extensions;assembly=Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:GpBackupper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:GpBackupper.Properties"
     Title="Yedekleyici"
     Width="800" Height="480"
     d:DataContext="{d:DesignInstance Type={x:Type local:MainViewModel}}"
@@ -43,23 +44,34 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <ComboBox x:Name="Cb">
-                                <ComboBoxItem Tag="{Binding Data.DocumentExtensions}">
-                                    <TextBlock><Run Text="BELGELER" />
-                                        <Run Text="{Binding Data.DocumentExtensions}" ToolTip="{Binding Data.DocumentExtensions}" /></TextBlock>
+                                <ComboBoxItem Tag="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}">
+                                    <TextBlock>
+                                        <Run Text="BELGELER" />
+                                        <Run Text="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}" />
+                                    </TextBlock>
                                 </ComboBoxItem>
-                                <ComboBoxItem Tag="{Binding Data.VideoExtensions}">
-                                    <TextBlock><Run Text="VİDEOLAR" /><Run Text="{Binding Data.VideoExtensions}" ToolTip="{Binding Data.VideoExtensions}" /></TextBlock>
+                                <ComboBoxItem Tag="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}">
+                                    <TextBlock>
+                                        <Run Text="VİDEOLAR" />
+                                        <Run Text="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}" />
+                                    </TextBlock>
                                 </ComboBoxItem>
-                                <ComboBoxItem Tag="{Binding Data.AudioExtensions}">
-                                    <TextBlock><Run Text="SESLER" /><Run Text="{Binding Data.AudioExtensions}" ToolTip="{Binding Data.AudioExtensions}" /></TextBlock>
+                                <ComboBoxItem Tag="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}">
+                                    <TextBlock>
+                                        <Run Text="SESLER" />
+                                        <Run Text="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}" />
+                                    </TextBlock>
                                 </ComboBoxItem>
-                                <ComboBoxItem Tag="{Binding Data.PictureExtensions}">
-                                    <TextBlock><Run Text="RESİMLER" /><Run Text="{Binding Data.PictureExtensions}" ToolTip="{Binding Data.PictureExtensions}" /></TextBlock>
+                                <ComboBoxItem Tag="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}">
+                                    <TextBlock>
+                                        <Run Text="RESİMLER" />
+                                        <Run Text="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}" />
+                                    </TextBlock>
                                 </ComboBoxItem>
-                                <ComboBoxItem Tag="{Binding Data.CustomExtensions}">
+                                <ComboBoxItem Tag="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="ÖZEL UZANTILAR" VerticalAlignment="Center" />
-                                        <TextBox Text="{Binding Data.CustomExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
+                                        <TextBox Text="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
@@ -148,6 +160,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBox Text="{Binding Data.DataSavePath}" IsReadOnly="True" />
@@ -181,8 +194,14 @@
                                     VerticalAlignment="Center" VerticalContentAlignment="Center"
                                     ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
                             </ListBox>
-                            <Button Content="BAŞLAT"
+                            <TextBlock TextTrimming="CharacterEllipsis"
                                 Grid.Row="2" Grid.ColumnSpan="2"
+                                VerticalAlignment="Center">
+                                <Run Text="{Binding Data.FileName}" Foreground="Red" />
+                                <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
+                            </TextBlock>
+                            <Button Content="BAŞLAT"
+                                Grid.Row="3" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"
                                 Command="{Binding StartCompress}" />
                         </Grid>

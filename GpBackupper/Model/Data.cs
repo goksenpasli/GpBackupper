@@ -12,33 +12,25 @@ namespace GpBackupper.View
     {
         private bool active = true;
 
-        private string audioExtensions = "*.aac;*.ac3;*.aif;*.aifc;*.aiff;*.au;*.cda;*.dts;*.fla;*.flac;*.it;*.m1a;*.m2a;*.m3u;*.m4a;*.mid;*.midi;*.mka;*.mod;*.mp2;*.mp3;*.mpa;*.ogg;*.ra;*.rmi;*.spc;*.rmi;*.snd;*.umx;*.voc;*.wav;*.wma;*.xm";
-
         private ObservableCollection<Data> backupExtensions = new();
 
         private ObservableCollection<Data> backupfolders = new();
 
         private int biçim;
 
-        private string customExtensions;
-
         private string dataSavePath;
-
-        private string documentExtensions = "*.c;*.chm;*.cpp;*.csv;*.cxx;*.doc;*.docm;*.docx;*.dot;*.dotm;*.dotx;*.h;*.hpp;*.htm;*.html;*.hxx;*.ini;*.java;*.lua;*.mht;*.mhtml;*.odt;*.pdf;*.potx;*.potm;*.ppam;*.ppsm;*.ppsx;*.pps;*.ppt;*.pptm;*.pptx;*.rtf;*.sldm;*.sldx;*.thmx;*.txt;*.vsd;*.wpd;*.wps;*.wri;*.xlam;*.xls;*.xlsb;*.xlsm;*.xlsx;*.xltm;*.xltx;*.xml";
 
         private string extension;
 
-        private int fileSize;
+        private string fileName;
+
+        private int? fileSize;
 
         private IEnumerable<object> folderExtensions;
 
         private int folderFileCount;
 
         private string folderName;
-
-        private string pictureExtensions = "*.ani;*.bmp;*.gif;*.ico;*.jpe;*.jpeg;*.jpg;*.pcx;*.png;*.psd;*.tga;*.tif;*.tiff;*.webp;*.wmf";
-
-        private string videoExtensions = "*.3g2;*.3gp;*.3gp2;*.3gpp;*.amr;*.amv;*.asf;*.avi;*.bdmv;*.bik;*.d2v;*.divx;*.drc;*.dsa;*.dsm;*.dss;*.dsv;*.evo;*.f4v;*.flc;*.fli;*.flic;*.flv;*.hdmov;*.ifo;*.ivf;*.m1v;*.m2p;*.m2t;*.m2ts;*.m2v;*.m4b;*.m4p;*.m4v;*.mkv;*.mp2v;*.mp4;*.mp4v;*.mpe;*.mpeg;*.mpg;*.mpls;*.mpv2;*.mpv4;*.mov;*.mts;*.ogm;*.ogv;*.pss;*.pva;*.qt;*.ram;*.ratdvd;*.rm;*.rmm;*.rmvb;*.roq;*.rpm;*.smil;*.smk;*.swf;*.tp;*.tpr;*.ts;*.vob;*.vp6;*.webm;*.wm;*.wmp;*.wmv";
 
         public bool Active
         {
@@ -50,19 +42,6 @@ namespace GpBackupper.View
                 {
                     active = value;
                     OnPropertyChanged(nameof(Active));
-                }
-            }
-        }
-
-        public string AudioExtensions
-        {
-            get => audioExtensions; set
-
-            {
-                if (audioExtensions != value)
-                {
-                    audioExtensions = value;
-                    OnPropertyChanged(nameof(AudioExtensions));
                 }
             }
         }
@@ -109,20 +88,6 @@ namespace GpBackupper.View
             }
         }
 
-        public string CustomExtensions
-        {
-            get => customExtensions;
-
-            set
-            {
-                if (customExtensions != value)
-                {
-                    customExtensions = value;
-                    OnPropertyChanged(nameof(CustomExtensions));
-                }
-            }
-        }
-
         public string DataSavePath
         {
             get => dataSavePath;
@@ -133,20 +98,6 @@ namespace GpBackupper.View
                 {
                     dataSavePath = value;
                     OnPropertyChanged(nameof(DataSavePath));
-                }
-            }
-        }
-
-        public string DocumentExtensions
-        {
-            get => documentExtensions;
-
-            set
-            {
-                if (documentExtensions != value)
-                {
-                    documentExtensions = value;
-                    OnPropertyChanged(nameof(DocumentExtensions));
                 }
             }
         }
@@ -167,7 +118,21 @@ namespace GpBackupper.View
             }
         }
 
-        public int FileSize
+        public string FileName
+        {
+            get => fileName;
+
+            set
+            {
+                if (fileName != value)
+                {
+                    fileName = value;
+                    OnPropertyChanged(nameof(FileName));
+                }
+            }
+        }
+
+        public int? FileSize
         {
             get => fileSize;
 
@@ -183,7 +148,7 @@ namespace GpBackupper.View
 
         public IEnumerable<object> FolderExtensions
         {
-            get { return folderExtensions; }
+            get => folderExtensions;
 
             set
             {
@@ -232,33 +197,6 @@ namespace GpBackupper.View
                     {
                     }
                     OnPropertyChanged(nameof(FolderName));
-                }
-            }
-        }
-
-        public string PictureExtensions
-        {
-            get => pictureExtensions;
-
-            set
-            {
-                if (pictureExtensions != value)
-                {
-                    pictureExtensions = value;
-                    OnPropertyChanged(nameof(PictureExtensions));
-                }
-            }
-        }
-
-        public string VideoExtensions
-        {
-            get => videoExtensions; set
-
-            {
-                if (videoExtensions != value)
-                {
-                    videoExtensions = value;
-                    OnPropertyChanged(nameof(VideoExtensions));
                 }
             }
         }

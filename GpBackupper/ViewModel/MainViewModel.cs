@@ -35,7 +35,7 @@ namespace GpBackupper
                         }
                     }
                 }
-            }, parameter => parameter is string fileextensions && ((!string.IsNullOrEmpty(fileextensions) && fileextensions.StartsWith("*.")) || Data.CustomExtensions?.StartsWith("*.") == true));
+            }, parameter => parameter is string fileextensions && ((!string.IsNullOrEmpty(fileextensions) && fileextensions.StartsWith("*.")) || Properties.Settings.Default.CustomExtensions?.StartsWith("*.") == true));
 
             AddBackupFolder = new RelayCommand<object>(parameter =>
             {
@@ -56,6 +56,7 @@ namespace GpBackupper
             SetSaveLocation = new RelayCommand<object>(parameter =>
             {
                 FolderBrowserDialog dialog = new();
+                dialog.Description = "Kayıt Klasörünü Seçin.";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     Data.DataSavePath = dialog.SelectedPath;
@@ -88,10 +89,9 @@ namespace GpBackupper
                 {
                     foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
                     {
+                        Data.FileName = Path.GetFileName(dosya);
+                        Data.FileSize = (int)new FileInfo(dosya).Length;
                         writer.Write(Path.GetFileName(dosya), dosya);
-
-                        compressorViewModel.CompressorView.Oran++;
-                        compressorViewModel.CompressorView.DosyaAdı = Path.GetFileName(dosya);
                     }
                 }
 
