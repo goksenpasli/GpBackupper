@@ -133,6 +133,16 @@ namespace GpBackupper
                     Data.BackupExtensions.Remove(data);
                 }
             }, parameter => true);
+
+            UpdateBuildInFileExtension = new RelayCommand<object>(parameter =>
+            {
+                Properties.Settings.Default.Save();
+            }, parameter => true);
+
+            ResetBuildInFileExtension = new RelayCommand<object>(parameter =>
+            {
+                Properties.Settings.Default.Reset();
+            }, parameter => true);
         }
 
         public ICommand AddBackupFileExtensions { get; }
@@ -155,8 +165,12 @@ namespace GpBackupper
 
         public ICommand RemoveFileExtension { get; }
 
+        public ICommand ResetBuildInFileExtension { get; }
+
         public ICommand SetSaveLocation { get; }
 
         public ICommand StartCompress { get; }
+
+        public ICommand UpdateBuildInFileExtension { get; }
     }
 }

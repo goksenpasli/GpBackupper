@@ -19,7 +19,7 @@
                 <local:TreeViewModel />
             </ObjectDataProvider.ObjectInstance>
         </ObjectDataProvider>
-        <HierarchicalDataTemplate ItemsSource="{Binding Path=SubFolders}" DataType="{x:Type local:TreeViewModel}" />
+        <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -38,48 +38,74 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <ComboBox x:Name="Cb">
+                                <ComboBox.Resources>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}" />
+                                    </Style>
+                                </ComboBox.Resources>
                                 <ComboBoxItem Tag="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
-                                        <Run Text="BELGELER" />
+                                        <Run Text="BELGELER" Foreground="Red" />
                                         <Run Text="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
-                                        <Run Text="VİDEOLAR" />
+                                        <Run Text="VİDEOLAR" Foreground="Red" />
                                         <Run Text="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
-                                        <Run Text="SESLER" />
+                                        <Run Text="SESLER" Foreground="Red" />
                                         <Run Text="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
-                                        <Run Text="RESİMLER" />
+                                        <Run Text="RESİMLER" Foreground="Red" />
                                         <Run Text="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="ÖZEL UZANTILAR" VerticalAlignment="Center" />
+                                        <TextBlock Text="ÖZEL UZANTILAR" Foreground="Red" VerticalAlignment="Center" />
                                         <TextBox Text="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
+                            <Extensions:ContentToggleButton Grid.Column="1" IsTabStop="False" OverContent="...">
+                                <GroupBox Header="UZANTILAR" Width="300">
+                                    <StackPanel>
+                                        <HeaderedContentControl Header="VİDEOLAR">
+                                            <TextBox Text="{Binding VideoExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                        </HeaderedContentControl>
+                                        <HeaderedContentControl Header="SESLER">
+                                            <TextBox Text="{Binding AudioExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                        </HeaderedContentControl>
+                                        <HeaderedContentControl Header="BELGELER">
+                                            <TextBox Text="{Binding DocumentExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                        </HeaderedContentControl>
+                                        <HeaderedContentControl Header="RESİMLER">
+                                            <TextBox Text="{Binding PictureExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                        </HeaderedContentControl>
+                                        <Button Content="GÜNCELLE" Command="{Binding UpdateBuildInFileExtension, Mode=OneWay}" />
+                                        <Button Content="SIFIRLA" Command="{Binding ResetBuildInFileExtension, Mode=OneWay}" />
+                                    </StackPanel>
+                                </GroupBox>
+                            </Extensions:ContentToggleButton>
                             <Button Content="LİSTEYE EKLE"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Command="{Binding AddBackupFileExtensions}"
                                 CommandParameter="{Binding SelectedItem.Tag, ElementName=Cb}" />
-                            <ListBox Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.BackupExtensions}">
+                            <ListBox Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding Data.BackupExtensions}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}">
@@ -90,17 +116,23 @@
                                                     </BindingGroup.ValidationRules>
                                                 </BindingGroup>
                                             </StackPanel.BindingGroup>
-                                            <Image Width="16" Height="16" Source="{Binding Path=Extension, Converter={StaticResource FilePathToIconConverter}, Mode=OneWay}" />
-                                            <TextBlock>
+                                            <Image Width="32" Height="32" Source="{Binding Path=Extension, Converter={StaticResource FilePathToIconConverter}, Mode=OneWay}" />
+                                            <TextBlock VerticalAlignment="Center">
+                                                <Run Text="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extension, ValidatesOnDataErrors=True}" />
+                                                <LineBreak />
                                                 <Run Text="{Binding Path=Extension, Converter={StaticResource FilePathToFileDescriptionConverter}, Mode=OneWay}" />
                                                 <Hyperlink Command="{Binding DataContext.RemoveFileExtension, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
                                                     <Run Text=" SİL" ToolTip="Bu Uzantıyı Sil" />
                                                 </Hyperlink>
-                                                <Run Text="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extension, ValidatesOnDataErrors=True}" />
                                             </TextBlock>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
                             </ListBox>
                         </Grid>
                     </GroupBox>
@@ -120,6 +152,7 @@
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
                                         <CheckBox Content="{Binding Name}"
+                                            IsEnabled="{Binding IsAccessible}"
                                             Command="{Binding DataContext.AddBackupFolder, ElementName=Window}"
                                             CommandParameter="{Binding Mode=OneWay}"
                                             IsChecked="{Binding IsChecked}" />
@@ -209,9 +242,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="GERİ YÜKLEME">
-                <Grid>
+                <GroupBox>
                     <Extensions:Compressor VerticalAlignment="Top" />
-                </Grid>
+                </GroupBox>
             </TabItem>
         </TabControl>
     </Grid>

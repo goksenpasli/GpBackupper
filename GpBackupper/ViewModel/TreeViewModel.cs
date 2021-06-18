@@ -51,6 +51,8 @@ namespace GpBackupper
 
         private bool ısChecked;
 
+        private bool isaccessible = true;
+
         private string name;
 
         public IEnumerable<string> Drives
@@ -110,6 +112,20 @@ namespace GpBackupper
             }
         }
 
+        public bool IsAccessible
+        {
+            get => isaccessible;
+
+            set
+            {
+                if (isaccessible != value)
+                {
+                    isaccessible = value;
+                    OnPropertyChanged(nameof(IsAccessible));
+                }
+            }
+        }
+
         public string Name
         {
             get => Folder.Name;
@@ -143,6 +159,7 @@ namespace GpBackupper
                     }
                     catch (UnauthorizedAccessException)
                     {
+                        IsAccessible = false;
                     }
                 }
                 return _subFolders;
