@@ -162,7 +162,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}" d:DataContext="{d:DesignInstance Type=local:TreeViewModel}">
+                            <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}" d:DataContext="{d:DesignInstance Type=local:TreeViewModel}" VirtualizingStackPanel.IsVirtualizing="True">
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
                                         <CheckBox Content="{Binding Name}"
