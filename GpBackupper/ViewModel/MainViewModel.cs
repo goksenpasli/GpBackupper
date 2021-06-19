@@ -37,18 +37,19 @@ namespace GpBackupper
                 }
             }, parameter => parameter is string fileextensions && ((!string.IsNullOrEmpty(fileextensions) && fileextensions.StartsWith("*.")) || Properties.Settings.Default.CustomExtensions?.StartsWith("*.") == true));
 
+            Data data = null;
             AddBackupFolder = new RelayCommand<object>(parameter =>
             {
                 if (parameter is TreeViewModel treeViewModel)
                 {
                     if (treeViewModel.IsChecked)
                     {
-                        Data data = new() { FolderName = treeViewModel.Folder.FullName };
+                        data = new() { FolderName = treeViewModel.Folder.FullName };
                         Data.BackupFolders.Add(data);
                     }
                     else
                     {
-                        Data.BackupFolders.RemoveAt(0);
+                        Data.BackupFolders.Remove(data);
                     }
                 }
             }, parameter => true);
@@ -146,15 +147,9 @@ namespace GpBackupper
                 }
             }, parameter => true);
 
-            UpdateBuildInFileExtension = new RelayCommand<object>(parameter =>
-            {
-                Properties.Settings.Default.Save();
-            }, parameter => true);
+            UpdateBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Save(), parameter => true);
 
-            ResetBuildInFileExtension = new RelayCommand<object>(parameter =>
-            {
-                Properties.Settings.Default.Reset();
-            }, parameter => true);
+            ResetBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Reset(), parameter => true);
         }
 
         public ICommand AddBackupFileExtensions { get; }
