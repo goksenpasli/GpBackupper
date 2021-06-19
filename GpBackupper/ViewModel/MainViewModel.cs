@@ -53,6 +53,15 @@ namespace GpBackupper
                 }
             }, parameter => true);
 
+            AddCommonFoldersBackupFolder = new RelayCommand<object>(parameter =>
+            {
+                if (parameter is CommonFolders folders)
+                {
+                    Data data = new() { FolderName = Environment.GetFolderPath((Environment.SpecialFolder)(int)folders) };
+                    Data.BackupFolders.Add(data);
+                }
+            }, parameter => true);
+
             SetSaveLocation = new RelayCommand<object>(parameter =>
             {
                 FolderBrowserDialog dialog = new();
@@ -150,6 +159,8 @@ namespace GpBackupper
         public ICommand AddBackupFileExtensions { get; }
 
         public ICommand AddBackupFolder { get; }
+
+        public ICommand AddCommonFoldersBackupFolder { get; }
 
         public Data Data
         {

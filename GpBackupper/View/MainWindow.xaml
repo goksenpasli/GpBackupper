@@ -4,7 +4,7 @@
     xmlns:Extensions="clr-namespace:Extensions;assembly=Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:GpBackupper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:GpBackupper.Properties"
+    xmlns:properties="clr-namespace:GpBackupper.Properties" xmlns:system="clr-namespace:System;assembly=mscorlib"
     Title="Yedekleyici"
     Width="800" Height="480"
     d:DataContext="{d:DesignInstance Type={x:Type local:MainViewModel}}"
@@ -138,10 +138,24 @@
                     </GroupBox>
                     <GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <GroupBox.Header>
-                            <ComboBox x:Name="CbDrive"
-                                Margin="1"
-                                ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}"
-                                SelectedIndex="0" />
+                            <UniformGrid Columns="2">
+                                <ComboBox x:Name="CbDrive"
+                                    Margin="1"
+                                    ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}"
+                                    SelectedIndex="0" />
+                                <UniformGrid Columns="5">
+                                    <UniformGrid.Resources>
+                                        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                                            <Setter Property="Command" Value="{Binding AddCommonFoldersBackupFolder, Mode=OneWay}" />
+                                        </Style>
+                                    </UniformGrid.Resources>
+                                    <Button Content="Masaüstü" CommandParameter="{Binding Data.CommonFolders[0]}" />
+                                    <Button Content="Belgeler" CommandParameter="{Binding Data.CommonFolders[1]}" />
+                                    <Button Content="Müzikler" CommandParameter="{Binding Data.CommonFolders[2]}" />
+                                    <Button Content="Videolar" CommandParameter="{Binding Data.CommonFolders[3]}" />
+                                    <Button Content="Resimler" CommandParameter="{Binding Data.CommonFolders[4]}" />
+                                </UniformGrid>
+                            </UniformGrid>
                         </GroupBox.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>

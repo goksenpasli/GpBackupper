@@ -8,6 +8,19 @@ using System.Linq;
 
 namespace GpBackupper.View
 {
+    public enum CommonFolders
+    {
+        Desktop = 0,
+
+        MyDocuments = 5,
+
+        MyMusic = 13,
+
+        MyPictures = 39,
+
+        MyVideos = 14,
+    }
+
     public class Data : InpcBase, IDataErrorInfo
     {
         private bool active = true;
@@ -91,6 +104,8 @@ namespace GpBackupper.View
                 }
             }
         }
+
+        public IList<CommonFolders> CommonFolders => Enum.GetValues(typeof(CommonFolders)).Cast<CommonFolders>().ToList();
 
         public string DataSavePath
         {
