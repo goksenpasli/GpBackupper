@@ -22,6 +22,8 @@ namespace GpBackupper.View
 
         private string extension;
 
+        private int fileCount;
+
         private string fileName;
 
         private int? fileSize;
@@ -31,6 +33,8 @@ namespace GpBackupper.View
         private int folderFileCount;
 
         private string folderName;
+
+        private int oran;
 
         public bool Active
         {
@@ -118,6 +122,20 @@ namespace GpBackupper.View
             }
         }
 
+        public int FileCount
+        {
+            get => fileCount;
+
+            set
+            {
+                if (fileCount != value)
+                {
+                    fileCount = value;
+                    OnPropertyChanged(nameof(FileCount));
+                }
+            }
+        }
+
         public string FileName
         {
             get => fileName;
@@ -197,6 +215,20 @@ namespace GpBackupper.View
                     {
                     }
                     OnPropertyChanged(nameof(FolderName));
+                }
+            }
+        }
+
+        public int Oran
+        {
+            get => oran;
+
+            set
+            {
+                if (oran != value)
+                {
+                    oran = value;
+                    OnPropertyChanged(nameof(Oran));
                 }
             }
         }

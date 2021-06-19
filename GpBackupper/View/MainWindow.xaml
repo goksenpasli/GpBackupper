@@ -227,12 +227,13 @@
                                     VerticalAlignment="Center" VerticalContentAlignment="Center"
                                     ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
                             </ListBox>
-                            <TextBlock TextTrimming="CharacterEllipsis"
-                                Grid.Row="2" Grid.ColumnSpan="2"
-                                VerticalAlignment="Center">
-                                <Run Text="{Binding Data.FileName}" Foreground="Red" />
-                                <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
-                            </TextBlock>
+                            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                                <ProgressBar Maximum="{Binding Data.FileCount}" Value="{Binding Data.Oran}" />
+                                <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                                    <Run Text="{Binding Data.FileName}" Foreground="Red" />
+                                    <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
+                                </TextBlock>
+                            </Grid>
                             <Button Content="BAŞLAT"
                                 Grid.Row="3" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"

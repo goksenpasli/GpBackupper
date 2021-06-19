@@ -87,11 +87,13 @@ namespace GpBackupper
 
                 void WriteData(IWriter writer)
                 {
+                    Data.FileCount = compressorViewModel.CompressorView.Dosyalar.Count;
                     foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
                     {
                         Data.FileName = Path.GetFileName(dosya);
                         Data.FileSize = (int)new FileInfo(dosya).Length;
                         writer.Write(Path.GetFileName(dosya), dosya);
+                        Data.Oran++;
                     }
                 }
 
