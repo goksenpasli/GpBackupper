@@ -35,7 +35,7 @@ namespace GpBackupper.View
 
         private string extension;
 
-        private int fileCount;
+        private double fileCount;
 
         private string fileName;
 
@@ -47,7 +47,7 @@ namespace GpBackupper.View
 
         private string folderName;
 
-        private int oran;
+        private double oran;
 
         public bool Active
         {
@@ -137,7 +137,7 @@ namespace GpBackupper.View
             }
         }
 
-        public int FileCount
+        public double FileCount
         {
             get => fileCount;
 
@@ -234,7 +234,7 @@ namespace GpBackupper.View
             }
         }
 
-        public int Oran
+        public double Oran
         {
             get => oran;
 

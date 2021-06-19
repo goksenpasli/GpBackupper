@@ -21,6 +21,9 @@
         </ObjectDataProvider>
         <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding Data.Oran}"/>
+    </Window.TaskbarItemInfo>
     <Grid>
         <TabControl>
             <TabItem Header="YEDEKLEME">
@@ -242,7 +245,7 @@
                                     ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
                             </ListBox>
                             <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                                <ProgressBar Maximum="{Binding Data.FileCount}" Value="{Binding Data.Oran}" />
+                                <ProgressBar  Value="{Binding Data.Oran}" Maximum="1" />
                                 <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
                                     <Run Text="{Binding Data.FileName}" Foreground="Red" />
                                     <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
