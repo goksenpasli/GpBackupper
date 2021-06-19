@@ -22,7 +22,7 @@
         <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding Data.Oran}"/>
+        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding Data.Oran}" />
     </Window.TaskbarItemInfo>
     <Grid>
         <TabControl>
@@ -244,17 +244,23 @@
                                     VerticalAlignment="Center" VerticalContentAlignment="Center"
                                     ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
                             </ListBox>
-                            <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                                <ProgressBar  Value="{Binding Data.Oran}" Maximum="1" />
-                                <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
-                                    <Run Text="{Binding Data.FileName}" Foreground="Red" />
-                                    <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
-                                </TextBlock>
-                            </Grid>
-                            <Button Content="BAŞLAT"
-                                Grid.Row="3" Grid.ColumnSpan="2"
+                            <TextBlock TextTrimming="CharacterEllipsis"
+                                Grid.Row="2" Grid.ColumnSpan="2"
+                                VerticalAlignment="Center">
+                                <Run Text="{Binding Data.FileName}" Foreground="Red" />
+                                <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
+                            </TextBlock>
+                            <Button Grid.Row="3" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"
-                                Command="{Binding StartCompress}" />
+                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                Command="{Binding StartCompress}">
+                                <Button.Content>
+                                    <Grid>
+                                        <ProgressBar Maximum="1" Value="{Binding Data.Oran}" />
+                                        <TextBlock Text="BAŞLAT" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
                         </Grid>
                     </GroupBox>
                 </Grid>

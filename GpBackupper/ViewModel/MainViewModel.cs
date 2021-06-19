@@ -58,8 +58,11 @@ namespace GpBackupper
             {
                 if (parameter is CommonFolders folders)
                 {
-                    Data data = new() { FolderName = Environment.GetFolderPath((Environment.SpecialFolder)(int)folders) };
-                    Data.BackupFolders.Add(data);
+                    data = new() { FolderName = Environment.GetFolderPath((Environment.SpecialFolder)(int)folders) };
+                    if (!Data.BackupFolders.Any(z => z.FolderName == data.FolderName))
+                    {
+                        Data.BackupFolders.Add(data);
+                    }
                 }
             }, parameter => true);
 
@@ -95,19 +98,6 @@ namespace GpBackupper
                     compressorViewModel.CompressorView.Dosyalar.Add(item);
                 }
 
-                void WriteData(IWriter writer)
-                {
-                    double currentfile = 0;
-                    Data.FileCount = compressorViewModel.CompressorView.Dosyalar.Count;
-                    foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
-                    {
-                        Data.FileName = Path.GetFileName(dosya);
-                        Data.FileSize = (int)new FileInfo(dosya).Length;
-                        writer.Write(Path.GetFileName(dosya), dosya);
-                        Data.Oran = currentfile++ / Data.FileCount;
-                    }
-                }
-
                 Task.Factory.StartNew(() =>
                 {
                     try
@@ -119,14 +109,14 @@ namespace GpBackupper
                             case 0:
                                 {
                                     using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
-                                    WriteData(writer);
+                                    WriteData(writer, compressorViewModel);
                                     break;
                                 }
 
                             case 1:
                                 {
                                     using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
-                                    WriteData(writer);
+                                    WriteData(writer, compressorViewModel);
                                     break;
                                 }
                         }
@@ -181,5 +171,18 @@ namespace GpBackupper
         public ICommand StartCompress { get; }
 
         public ICommand UpdateBuildInFileExtension { get; }
+
+        private void WriteData(IWriter writer, CompressorViewModel compressorViewModel)
+        {
+            double currentfile = 1;
+            Data.FileCount = compressorViewModel.CompressorView.Dosyalar.Count;
+            foreach (string dosya in compressorViewModel.CompressorView.Dosyalar)
+            {
+                Data.FileName = Path.GetFileName(dosya);
+                Data.FileSize = (int)new FileInfo(dosya).Length;
+                writer.Write(Path.GetFileName(dosya), dosya);
+                Data.Oran = currentfile++ / Data.FileCount;
+            }
+        }
     }
 }
