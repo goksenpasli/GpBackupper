@@ -55,6 +55,8 @@ namespace GpBackupper.View
 
         private double oran;
 
+        private string selectedDrive;
+
         public Data()
         {
             SearchComputerFiles = new RelayCommand<object>(parameter =>
@@ -63,13 +65,13 @@ namespace GpBackupper.View
                 {
                     Active = false;
                     FoundFiles = new ObservableCollection<string>();
-                    foreach (string item in @"C:\".DirSearch(parameter as string))
+                    foreach (string item in SelectedDrive.DirSearch(parameter as string))
                     {
                         Application.Current.Dispatcher.BeginInvoke(new Action(() => FoundFiles.Add(item)));
                     }
                     Active = true;
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-            }, parameter => true);
+            }, parameter => !string.IsNullOrEmpty(SelectedDrive));
         }
 
         public bool Active
@@ -286,6 +288,20 @@ namespace GpBackupper.View
         }
 
         public ICommand SearchComputerFiles { get; }
+
+        public string SelectedDrive
+        {
+            get => selectedDrive;
+
+            set
+            {
+                if (selectedDrive != value)
+                {
+                    selectedDrive = value;
+                    OnPropertyChanged(nameof(SelectedDrive));
+                }
+            }
+        }
 
         public string this[string columnName] => columnName switch
         {

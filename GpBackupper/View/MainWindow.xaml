@@ -143,10 +143,26 @@
                                                                 <RowDefinition Height="Auto" />
                                                                 <RowDefinition />
                                                             </Grid.RowDefinitions>
-                                                            <Button Content="BİLGİSAYARDA ARA"
-                                                                IsEnabled="{Binding Active}"
-                                                                Command="{Binding SearchComputerFiles}"
-                                                                CommandParameter="{Binding Extension}" />
+                                                            <UniformGrid IsEnabled="{Binding Active}" Columns="2">
+                                                                <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                                    <ComboBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <Image Width="16" Height="16">
+                                                                                    <Image.Source>
+                                                                                        <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                                                            <Binding Source="Shell32.dll" />
+                                                                                            <Binding Source="8" />
+                                                                                        </MultiBinding>
+                                                                                    </Image.Source>
+                                                                                </Image>
+                                                                                <TextBlock Text="{Binding Mode=OneWay}" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </ComboBox.ItemTemplate>
+                                                                </ComboBox>
+                                                                <Button Content="BİLGİSAYARDA ARA" Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Extension}" />
+                                                            </UniformGrid>
                                                             <ListBox Grid.Row="1"
                                                                 Width="400" Height="250"
                                                                 ItemsSource="{Binding FoundFiles}">
@@ -182,11 +198,10 @@
                                                 <Run Text="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extension, ValidatesOnDataErrors=True}" />
                                                 <LineBreak />
                                                 <Run Text="{Binding Path=Extension, Converter={StaticResource FilePathToFileDescriptionConverter}, Mode=OneWay}" />
-                                                <Hyperlink Command="{Binding DataContext.RemoveFileExtension, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
+                                                <Hyperlink IsEnabled="{Binding Active}" Command="{Binding DataContext.RemoveFileExtension, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
                                                     <Run Text=" SİL" ToolTip="Bu Uzantıyı Sil" />
                                                 </Hyperlink>
                                             </TextBlock>
-
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
