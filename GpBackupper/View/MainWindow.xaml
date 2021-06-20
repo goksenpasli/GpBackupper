@@ -15,6 +15,7 @@
         <local:CommonExtensionImageVisibilityConverter x:Key="CommonExtensionImageVisibilityConverter" />
         <Extensions:FilePathToIconConverter x:Key="FilePathToIconConverter" />
         <Extensions:SystemFileIconConverter x:Key="SystemFileIconConverter" />
+        <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter" />
         <local:DriveConverter x:Key="DriveConverter" />
         <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
             <ObjectDataProvider.ObjectInstance>
@@ -123,14 +124,17 @@
                                             </StackPanel.BindingGroup>
                                             <Extensions:ContentToggleButton Background="Transparent" BorderBrush="Transparent">
                                                 <Extensions:ContentToggleButton.OverContent>
-                                                    <Image Width="16" Height="16">
-                                                        <Image.Source>
-                                                            <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
-                                                                <Binding Source="Shell32.dll" />
-                                                                <Binding Source="22" />
-                                                            </MultiBinding>
-                                                        </Image.Source>
-                                                    </Image>
+                                                    <StackPanel>
+                                                        <Image Width="16" Height="16">
+                                                            <Image.Source>
+                                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                                    <Binding Source="Shell32.dll" />
+                                                                    <Binding Source="22" />
+                                                                </MultiBinding>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <ProgressBar Width="24" Height="12" IsIndeterminate="{Binding Active, Converter={StaticResource ReverseBooleanConverter}}" />
+                                                    </StackPanel>
                                                 </Extensions:ContentToggleButton.OverContent>
                                                 <Extensions:ContentToggleButton.Content>
                                                     <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
@@ -139,7 +143,10 @@
                                                                 <RowDefinition Height="Auto" />
                                                                 <RowDefinition />
                                                             </Grid.RowDefinitions>
-                                                            <Button Content="BİLGİSAYARDA ARA" Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Extension}" />
+                                                            <Button Content="BİLGİSAYARDA ARA"
+                                                                IsEnabled="{Binding Active}"
+                                                                Command="{Binding SearchComputerFiles}"
+                                                                CommandParameter="{Binding Extension}" />
                                                             <ListBox Grid.Row="1"
                                                                 Width="400" Height="250"
                                                                 ItemsSource="{Binding FoundFiles}">

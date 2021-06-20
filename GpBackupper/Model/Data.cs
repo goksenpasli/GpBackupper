@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace GpBackupper.View
@@ -56,11 +59,16 @@ namespace GpBackupper.View
         {
             SearchComputerFiles = new RelayCommand<object>(parameter =>
             {
-                FoundFiles = new ObservableCollection<string>();
-                foreach (string item in @"C:\".DirSearch(parameter as string))
+                Task.Factory.StartNew(() =>
                 {
-                    FoundFiles.Add(item);
-                }
+                    Active = false;
+                    FoundFiles = new ObservableCollection<string>();
+                    foreach (string item in @"C:\".DirSearch(parameter as string))
+                    {
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => FoundFiles.Add(item)));
+                    }
+                    Active = true;
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }, parameter => true);
         }
 

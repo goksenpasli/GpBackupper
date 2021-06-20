@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CommonExtensionImageVisibilityConverter.cs" />
     <Compile Include="Converters\DriveConverter.cs" />
+    <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\TreeViewModel.cs" />
     <Compile Include="Model\Data.cs" />
