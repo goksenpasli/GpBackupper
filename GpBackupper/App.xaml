@@ -22,7 +22,7 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-            <ControlTemplate x:Key="ValidationErrorTemplate">
+             <ControlTemplate x:Key="ValidationErrorTemplate">
                 <Grid Focusable="False">
                     <AdornedElementPlaceholder x:Name="Adorner" />
                     <Canvas x:Name="Cnv"

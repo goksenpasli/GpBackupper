@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
 
 namespace GpBackupper.View
 {
@@ -47,7 +48,21 @@ namespace GpBackupper.View
 
         private string folderName;
 
+        private ObservableCollection<string> foundFiles;
+
         private double oran;
+
+        public Data()
+        {
+            SearchComputerFiles = new RelayCommand<object>(parameter =>
+            {
+                FoundFiles = new ObservableCollection<string>();
+                foreach (string item in @"C:\".DirSearch(parameter as string))
+                {
+                    FoundFiles.Add(item);
+                }
+            }, parameter => true);
+        }
 
         public bool Active
         {
@@ -195,7 +210,7 @@ namespace GpBackupper.View
 
         public int FolderFileCount
         {
-            get { return folderFileCount; }
+            get => folderFileCount;
 
             set
             {
@@ -234,6 +249,20 @@ namespace GpBackupper.View
             }
         }
 
+        public ObservableCollection<string> FoundFiles
+        {
+            get => foundFiles;
+
+            set
+            {
+                if (foundFiles != value)
+                {
+                    foundFiles = value;
+                    OnPropertyChanged(nameof(FoundFiles));
+                }
+            }
+        }
+
         public double Oran
         {
             get => oran;
@@ -247,6 +276,8 @@ namespace GpBackupper.View
                 }
             }
         }
+
+        public ICommand SearchComputerFiles { get; }
 
         public string this[string columnName] => columnName switch
         {

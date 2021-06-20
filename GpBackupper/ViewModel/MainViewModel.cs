@@ -5,6 +5,7 @@ using SharpCompress.Writers;
 using SharpCompress.Writers.Zip;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -17,8 +18,6 @@ namespace GpBackupper
 {
     public class MainViewModel : InpcBase
     {
-        private Data data;
-
         public MainViewModel()
         {
             Data = new Data();
@@ -75,6 +74,8 @@ namespace GpBackupper
                     Data.DataSavePath = dialog.SelectedPath;
                 }
             }, parameter => true);
+
+            OpenFile = new RelayCommand<object>(parameter => Process.Start(parameter as string), parameter => true);
 
             StartCompress = new RelayCommand<object>(parameter =>
             {
@@ -148,19 +149,9 @@ namespace GpBackupper
 
         public ICommand AddCommonFoldersBackupFolder { get; }
 
-        public Data Data
-        {
-            get => data;
+        public Data Data { get; set; }
 
-            set
-            {
-                if (data != value)
-                {
-                    data = value;
-                    OnPropertyChanged(nameof(Data));
-                }
-            }
-        }
+        public ICommand OpenFile { get; }
 
         public ICommand RemoveFileExtension { get; }
 

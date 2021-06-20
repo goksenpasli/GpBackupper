@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -116,6 +117,33 @@ namespace Extensions
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool DestroyIcon(this IntPtr handle);
+
+        public static ConcurrentBag<string> DirSearch(this string path, string pattern = "*.*")
+        {
+            ConcurrentQueue<string> pendingQueue = new();
+            pendingQueue.Enqueue(path);
+
+            ConcurrentBag<string> filesNames = new();
+            while (pendingQueue.Count > 0)
+            {
+                try
+                {
+                    pendingQueue.TryDequeue(out path);
+
+                    string[] files = Directory.GetFiles(path, pattern);
+
+                    Parallel.ForEach(files, x => filesNames.Add(x));
+
+                    string[] directories = Directory.GetDirectories(path);
+
+                    Parallel.ForEach(directories, (x) => pendingQueue.Enqueue(x));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+            }
+            return filesNames;
+        }
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr ExtractIcon(this IntPtr hInst, string lpszExeFileName, int nIconIndex);

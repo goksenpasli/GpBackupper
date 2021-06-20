@@ -12,7 +12,9 @@
     mc:Ignorable="d">
     <Window.Resources>
         <Extensions:FilePathToFileDescriptionConverter x:Key="FilePathToFileDescriptionConverter" />
+        <local:CommonExtensionImageVisibilityConverter x:Key="CommonExtensionImageVisibilityConverter" />
         <Extensions:FilePathToIconConverter x:Key="FilePathToIconConverter" />
+        <Extensions:SystemFileIconConverter x:Key="SystemFileIconConverter" />
         <local:DriveConverter x:Key="DriveConverter" />
         <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
             <ObjectDataProvider.ObjectInstance>
@@ -119,7 +121,56 @@
                                                     </BindingGroup.ValidationRules>
                                                 </BindingGroup>
                                             </StackPanel.BindingGroup>
-                                            <Image Width="32" Height="32" Source="{Binding Path=Extension, Converter={StaticResource FilePathToIconConverter}, Mode=OneWay}" />
+                                            <Extensions:ContentToggleButton Background="Transparent" BorderBrush="Transparent">
+                                                <Extensions:ContentToggleButton.OverContent>
+                                                    <Image Width="16" Height="16">
+                                                        <Image.Source>
+                                                            <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                                <Binding Source="Shell32.dll" />
+                                                                <Binding Source="22" />
+                                                            </MultiBinding>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </Extensions:ContentToggleButton.OverContent>
+                                                <Extensions:ContentToggleButton.Content>
+                                                    <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition />
+                                                            </Grid.RowDefinitions>
+                                                            <Button Content="BİLGİSAYARDA ARA" Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Extension}" />
+                                                            <ListBox Grid.Row="1"
+                                                                Width="400" Height="250"
+                                                                ItemsSource="{Binding FoundFiles}">
+                                                                <ListBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock>
+                                                                            <Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding Mode=OneWay}">
+                                                                                <Run Text="{Binding Mode=OneWay}" />
+                                                                            </Hyperlink>
+                                                                        </TextBlock>
+                                                                    </DataTemplate>
+                                                                </ListBox.ItemTemplate>
+                                                            </ListBox>
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </Extensions:ContentToggleButton.Content>
+                                            </Extensions:ContentToggleButton>
+                                            <Canvas Width="32" Height="32">
+                                                <Image Width="32" Height="32" Source="{Binding Path=Extension, Converter={StaticResource FilePathToIconConverter}, Mode=OneWay}" />
+                                                <Image Visibility="{Binding Extension, Converter={StaticResource CommonExtensionImageVisibilityConverter}}"
+                                                    Canvas.Top="0" Canvas.Right="0"
+                                                    Width="16" Height="16"
+                                                    ToolTip="Yaygın Dosya">
+                                                    <Image.Source>
+                                                        <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                            <Binding Source="Shell32.dll" />
+                                                            <Binding Source="208" />
+                                                        </MultiBinding>
+                                                    </Image.Source>
+                                                </Image>
+                                            </Canvas>
                                             <TextBlock VerticalAlignment="Center">
                                                 <Run Text="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extension, ValidatesOnDataErrors=True}" />
                                                 <LineBreak />
@@ -128,12 +179,13 @@
                                                     <Run Text=" SİL" ToolTip="Bu Uzantıyı Sil" />
                                                 </Hyperlink>
                                             </TextBlock>
+
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <UniformGrid Columns="2" />
+                                        <Extensions:VirtualizingWrapPanel ItemHeight="64" ItemWidth="360" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
@@ -145,7 +197,23 @@
                                 <ComboBox x:Name="CbDrive"
                                     Margin="1"
                                     ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}"
-                                    SelectedIndex="0" />
+                                    SelectedIndex="0">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Width="16" Height="16">
+                                                    <Image.Source>
+                                                        <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                            <Binding Source="Shell32.dll" />
+                                                            <Binding Source="8" />
+                                                        </MultiBinding>
+                                                    </Image.Source>
+                                                </Image>
+                                                <TextBlock Text="{Binding Mode=OneWay}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                                 <UniformGrid Columns="5">
                                     <UniformGrid.Resources>
                                         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -168,37 +236,59 @@
                             <TreeView ItemsSource="{Binding ElementName=CbDrive, Path=SelectedItem, Converter={StaticResource DriveConverter}}" d:DataContext="{d:DesignInstance Type=local:TreeViewModel}" VirtualizingStackPanel.IsVirtualizing="True">
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
-                                        <CheckBox Content="{Binding Name}"
-                                            IsEnabled="{Binding IsAccessible}"
+                                        <CheckBox IsEnabled="{Binding IsAccessible}"
                                             Command="{Binding DataContext.AddBackupFolder, ElementName=Window}"
                                             CommandParameter="{Binding Mode=OneWay}"
-                                            IsChecked="{Binding IsChecked}" />
+                                            IsChecked="{Binding IsChecked}">
+                                            <CheckBox.Content>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Width="16" Height="16">
+                                                        <Image.Source>
+                                                            <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                                <Binding Source="Shell32.dll" />
+                                                                <Binding Source="4" />
+                                                            </MultiBinding>
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </StackPanel>
+                                            </CheckBox.Content>
+                                        </CheckBox>
                                     </HierarchicalDataTemplate>
                                 </TreeView.Resources>
                             </TreeView>
-                            <ListBox Grid.Column="1" ItemsSource="{Binding Data.BackupFolders}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock>
-                                                <Run Text="{Binding FolderName}" />
-                                                <Run Text="{Binding FolderFileCount, StringFormat={}{0} Dosya Var}" Foreground="Red">
-                                                    <Run.ToolTip>
-                                                        <ListView ItemsSource="{Binding FolderExtensions}">
-                                                            <ListView.View>
-                                                                <GridView>
-                                                                    <GridViewColumn Header="UZANTI" DisplayMemberBinding="{Binding Extension}" />
-                                                                    <GridViewColumn Header="SAYI" DisplayMemberBinding="{Binding Count}" />
-                                                                </GridView>
-                                                            </ListView.View>
-                                                        </ListView>
-                                                    </Run.ToolTip>
-                                                </Run>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <ListBox Grid.Row="0" ItemsSource="{Binding Data.BackupFolders}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>
+                                                    <Run Text="{Binding FolderName}" />
+                                                    <Run Text="{Binding FolderFileCount, StringFormat={}{0} Dosya Var}" Foreground="Red">
+                                                        <Run.ToolTip>
+                                                            <ListView ItemsSource="{Binding FolderExtensions}">
+                                                                <ListView.View>
+                                                                    <GridView>
+                                                                        <GridViewColumn Header="UZANTI" DisplayMemberBinding="{Binding Extension}" />
+                                                                        <GridViewColumn Header="SAYI" DisplayMemberBinding="{Binding Count}" />
+                                                                    </GridView>
+                                                                </ListView.View>
+                                                            </ListView>
+                                                        </Run.ToolTip>
+                                                    </Run>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <GroupBox Header="ARŞİV İÇERİK GÖR" Grid.Row="1">
+                                    <Extensions:Compressor />
+                                </GroupBox>
+                            </Grid>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="KAYIT AYARLARI" Grid.Row="1" Grid.Column="0">
@@ -264,11 +354,6 @@
                         </Grid>
                     </GroupBox>
                 </Grid>
-            </TabItem>
-            <TabItem Header="GERİ YÜKLEME">
-                <GroupBox>
-                    <Extensions:Compressor VerticalAlignment="Top" />
-                </GroupBox>
             </TabItem>
         </TabControl>
     </Grid>
