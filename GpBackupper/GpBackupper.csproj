@@ -69,12 +69,19 @@
     <Compile Include="Converters\CommonExtensionImageVisibilityConverter.cs" />
     <Compile Include="Converters\DriveConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
+    <Compile Include="SearchWindowControl.xaml.cs">
+      <DependentUpon>SearchWindowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\TreeViewModel.cs" />
     <Compile Include="Model\Data.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="SearchWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

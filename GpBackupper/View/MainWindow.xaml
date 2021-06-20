@@ -14,14 +14,8 @@
         <Extensions:FilePathToFileDescriptionConverter x:Key="FilePathToFileDescriptionConverter" />
         <local:CommonExtensionImageVisibilityConverter x:Key="CommonExtensionImageVisibilityConverter" />
         <Extensions:FilePathToIconConverter x:Key="FilePathToIconConverter" />
-        <Extensions:SystemFileIconConverter x:Key="SystemFileIconConverter" />
         <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter" />
         <local:DriveConverter x:Key="DriveConverter" />
-        <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
-            <ObjectDataProvider.ObjectInstance>
-                <local:TreeViewModel />
-            </ObjectDataProvider.ObjectInstance>
-        </ObjectDataProvider>
         <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
     <Window.TaskbarItemInfo>
@@ -133,51 +127,13 @@
                                                                 </MultiBinding>
                                                             </Image.Source>
                                                         </Image>
-                                                        <ProgressBar Width="24" Height="12" IsIndeterminate="{Binding Active, Converter={StaticResource ReverseBooleanConverter}}" />
+                                                        <ProgressBar Width="24" Height="14"
+                                                            Style="{StaticResource ProgressBarStyle}"
+                                                            IsIndeterminate="{Binding Active, Converter={StaticResource ReverseBooleanConverter}}" />
                                                     </StackPanel>
                                                 </Extensions:ContentToggleButton.OverContent>
                                                 <Extensions:ContentToggleButton.Content>
-                                                    <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto" />
-                                                                <RowDefinition />
-                                                            </Grid.RowDefinitions>
-                                                            <UniformGrid IsEnabled="{Binding Active}" Columns="2">
-                                                                <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                                    <ComboBox.ItemTemplate>
-                                                                        <DataTemplate>
-                                                                            <StackPanel Orientation="Horizontal">
-                                                                                <Image Width="16" Height="16">
-                                                                                    <Image.Source>
-                                                                                        <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
-                                                                                            <Binding Source="Shell32.dll" />
-                                                                                            <Binding Source="8" />
-                                                                                        </MultiBinding>
-                                                                                    </Image.Source>
-                                                                                </Image>
-                                                                                <TextBlock Text="{Binding Mode=OneWay}" />
-                                                                            </StackPanel>
-                                                                        </DataTemplate>
-                                                                    </ComboBox.ItemTemplate>
-                                                                </ComboBox>
-                                                                <Button Content="BİLGİSAYARDA ARA" Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Extension}" />
-                                                            </UniformGrid>
-                                                            <ListBox Grid.Row="1"
-                                                                Width="400" Height="250"
-                                                                ItemsSource="{Binding FoundFiles}">
-                                                                <ListBox.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <TextBlock>
-                                                                            <Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding Mode=OneWay}">
-                                                                                <Run Text="{Binding Mode=OneWay}" />
-                                                                            </Hyperlink>
-                                                                        </TextBlock>
-                                                                    </DataTemplate>
-                                                                </ListBox.ItemTemplate>
-                                                            </ListBox>
-                                                        </Grid>
-                                                    </GroupBox>
+                                                    <local:SearchWindowControl Width="450" Height="350" />
                                                 </Extensions:ContentToggleButton.Content>
                                             </Extensions:ContentToggleButton>
                                             <Canvas Width="32" Height="32">
@@ -378,5 +334,10 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <TextBlock Margin="0,4,4,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Hyperlink Command="{Binding OpenFile, Mode=OneWay}" CommandParameter="https://github.com/goksenpasli">
+                <Run Text="HAKKINDA" />
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>

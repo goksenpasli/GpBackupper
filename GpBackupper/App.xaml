@@ -1,6 +1,7 @@
 ﻿<Application x:Class="GpBackupper.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Extensions="clr-namespace:Extensions;assembly=Extensions"
     xmlns:ice="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:local="clr-namespace:GpBackupper"
     StartupUri="View/MainWindow.xaml">
@@ -10,6 +11,12 @@
                 <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,Culture=neutral,PublicKeyToken=31bf3856ad364e35,processorArchitecture=MSIL;component/themes/Aero.NormalColor.xaml" />
                 <ResourceDictionary Source="/Extensions;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Extensions:SystemFileIconConverter x:Key="SystemFileIconConverter" />
+            <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
+                <ObjectDataProvider.ObjectInstance>
+                    <local:TreeViewModel />
+                </ObjectDataProvider.ObjectInstance>
+            </ObjectDataProvider>
             <DrawingBrush x:Key="Dur" ice:Freeze="True" Stretch="Uniform">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
@@ -22,7 +29,7 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-             <ControlTemplate x:Key="ValidationErrorTemplate">
+            <ControlTemplate x:Key="ValidationErrorTemplate">
                 <Grid Focusable="False">
                     <AdornedElementPlaceholder x:Name="Adorner" />
                     <Canvas x:Name="Cnv"
