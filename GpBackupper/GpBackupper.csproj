@@ -69,7 +69,7 @@
     <Compile Include="Converters\CommonExtensionImageVisibilityConverter.cs" />
     <Compile Include="Converters\DriveConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
-    <Compile Include="SearchWindowControl.xaml.cs">
+    <Compile Include="View\SearchWindowControl.xaml.cs">
       <DependentUpon>SearchWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="SearchWindowControl.xaml">
+    <Page Include="View\SearchWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

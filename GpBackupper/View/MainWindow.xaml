@@ -324,7 +324,7 @@
                                 Command="{Binding StartCompress}">
                                 <Button.Content>
                                     <Grid>
-                                        <ProgressBar Maximum="1" Value="{Binding Data.Oran}" />
+                                        <ProgressBar Style="{StaticResource ProgressBarStyle}" Maximum="1" Value="{Binding Data.Oran}" />
                                         <TextBlock Text="BAŞLAT" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Grid>
                                 </Button.Content>

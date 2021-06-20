@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,7 +35,7 @@ namespace GpBackupper
                         }
                     }
                 }
-            }, parameter => parameter is string fileextensions && ((!string.IsNullOrEmpty(fileextensions) && fileextensions.StartsWith("*.")) || Properties.Settings.Default.CustomExtensions?.StartsWith("*.") == true));
+            }, parameter => parameter is string fileextensions && ValidateExtensions(fileextensions) || ValidateExtensions(Properties.Settings.Default.CustomExtensions));
 
             Data data = null;
             AddBackupFolder = new RelayCommand<object>(parameter =>
@@ -138,7 +139,13 @@ namespace GpBackupper
                 }
             }, parameter => true);
 
-            UpdateBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Save(), parameter => true);
+            UpdateBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Save(), parameter =>
+            {
+                return ValidateExtensions(Properties.Settings.Default.DocumentExtensions) &&
+                ValidateExtensions(Properties.Settings.Default.AudioExtensions) &&
+                ValidateExtensions(Properties.Settings.Default.VideoExtensions) &&
+                ValidateExtensions(Properties.Settings.Default.PictureExtensions);
+            });
 
             ResetBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Reset(), parameter => true);
         }
@@ -162,6 +169,11 @@ namespace GpBackupper
         public ICommand StartCompress { get; }
 
         public ICommand UpdateBuildInFileExtension { get; }
+
+        private bool ValidateExtensions(string documentExtensions)
+        {
+            return new Regex(@"\*\.(?=.)").Match(documentExtensions).Success;
+        }
 
         private void WriteData(IWriter writer, CompressorViewModel compressorViewModel)
         {
