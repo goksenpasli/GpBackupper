@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GpBackupper.SearchWindowControl"
+﻿<UserControl x:Class="GpBackupper.SearchWindowControl" x:Name="UserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Extensions="clr-namespace:Extensions;assembly=Extensions"
@@ -8,18 +8,19 @@
     d:DataContext="{d:DesignInstance Type=view:Data}"
     d:DesignHeight="350" d:DesignWidth="450" UseLayoutRounding="True"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="Cvs" Source="{Binding FoundFiles}" />
+    </UserControl.Resources>
     <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <UniformGrid Grid.ColumnSpan="2" IsEnabled="{Binding Active}" Columns="2">
+            <UniformGrid IsEnabled="{Binding Active}" Columns="2">
                 <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -51,9 +52,7 @@
                     </StackPanel>
                 </Button>
             </UniformGrid>
-            <UniformGrid x:Name="Ug"
-                Grid.Row="1" Grid.ColumnSpan="2"
-                Columns="2">
+            <UniformGrid x:Name="Ug" Grid.Row="1" Columns="2">
                 <UniformGrid.DataContext>
                     <local:MainViewModel />
                 </UniformGrid.DataContext>
@@ -74,28 +73,10 @@
                     </Button.Content>
                 </Button>
             </UniformGrid>
-            <ListBox Grid.Row="2"
-                ItemsSource="{Binding FoundFiles}"
-                Extensions:ListBoxHelper.SelectedItems="{Binding SelectedFiles}"
-                SelectionMode="Extended">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
-                            <TextBlock>
-                                <Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding Mode=OneWay}">
-                                    <Run Text="{Binding Mode=OneWay}" />
-                                </Hyperlink>
-                            </TextBlock>
-                        </CheckBox>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Grid.Row="2" Grid.Column="1"
-                Command="{Binding CompressSelectedFiles, Mode=OneWay}"
-                CommandParameter="{Binding DataContext, ElementName=Ug}">
+            <Button Grid.Row="2" Command="{Binding CompressSelectedFiles, Mode=OneWay}" CommandParameter="{Binding DataContext, ElementName=Ug}">
                 <Button.Content>
-                    <StackPanel>
-                        <Image Width="32" Height="32">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16">
                             <Image.Source>
                                 <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
                                     <Binding Source="zipfldr.dll" />
@@ -103,10 +84,25 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <TextBlock Text="DOSYALARI&#x0a;SIKIŞTIR" />
+                        <TextBlock Text="DOSYALARI SIKIŞTIR" />
                     </StackPanel>
                 </Button.Content>
             </Button>
+            <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" CharacterCasing="Lower" />
+            <ListBox Grid.Row="4"
+                ItemsSource="{Binding FoundFiles}"
+                Extensions:ListBoxHelper.SelectedItems="{Binding SelectedFiles}"
+                IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                            <TextBlock><Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding Mode=OneWay}">
+                                    <Run Text="{Binding Mode=OneWay}" />
+                                </Hyperlink></TextBlock>
+                        </CheckBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </GroupBox>
 </UserControl>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace GpBackupper.View
@@ -55,6 +56,8 @@ namespace GpBackupper.View
 
         private double oran;
 
+        private string searchFileName;
+
         private string selectedDrive;
 
         private ObservableCollection<string> selectedFiles = new();
@@ -85,6 +88,8 @@ namespace GpBackupper.View
                     model.Compress(compressorViewModel);
                 }
             }, parameter => !string.IsNullOrWhiteSpace((parameter as MainViewModel)?.Data.DataSavePath) && SelectedFiles.Any());
+
+            PropertyChanged += Data_PropertyChanged;
         }
 
         public bool Active
@@ -304,6 +309,20 @@ namespace GpBackupper.View
 
         public ICommand SearchComputerFiles { get; }
 
+        public string SearchFileName
+        {
+            get => searchFileName;
+
+            set
+            {
+                if (searchFileName != value)
+                {
+                    searchFileName = value;
+                    OnPropertyChanged(nameof(SearchFileName));
+                }
+            }
+        }
+
         public string SelectedDrive
         {
             get => selectedDrive;
@@ -337,5 +356,13 @@ namespace GpBackupper.View
             "Extension" when string.IsNullOrEmpty(Extension) || !Extension.StartsWith("*.") => "Uzantı Boş Olmamalı Ve *. İle Başlamalıdır. Silip Tekrar Ekleyin.",
             _ => null
         };
+
+        private void Data_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SearchFileName" && FoundFiles?.Any() == true)
+            {
+                CollectionViewSource.GetDefaultView(FoundFiles).Filter = string.IsNullOrWhiteSpace(SearchFileName) ? null : item => (item as string)?.ToLower().Contains(SearchFileName) ?? false;
+            }
+        }
     }
 }

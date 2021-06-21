@@ -118,8 +118,8 @@
                                             </StackPanel.BindingGroup>
                                             <Extensions:ContentToggleButton Background="Transparent" BorderBrush="Transparent">
                                                 <Extensions:ContentToggleButton.OverContent>
-                                                    <StackPanel>
-                                                        <Image Width="16" Height="16">
+                                                    <Canvas Width="24" Height="30">
+                                                        <Image Canvas.Left="4" Width="16" Height="16">
                                                             <Image.Source>
                                                                 <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
                                                                     <Binding Source="Shell32.dll" />
@@ -127,10 +127,14 @@
                                                                 </MultiBinding>
                                                             </Image.Source>
                                                         </Image>
-                                                        <ProgressBar Width="24" Height="14"
+                                                        <ProgressBar Canvas.Bottom="0"
+                                                            Width="24" Height="14"
                                                             Style="{StaticResource ProgressBarStyle}"
                                                             IsIndeterminate="{Binding Active, Converter={StaticResource ReverseBooleanConverter}}" />
-                                                    </StackPanel>
+                                                        <TextBlock Text="{Binding FoundFiles.Count}"
+                                                            Canvas.Left="2" Canvas.Bottom="2"
+                                                            FontSize="8" />
+                                                    </Canvas>
                                                 </Extensions:ContentToggleButton.OverContent>
                                                 <Extensions:ContentToggleButton.Content>
                                                     <local:SearchWindowControl Width="450" Height="350" />
