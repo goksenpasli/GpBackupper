@@ -215,7 +215,7 @@
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
                                         <CheckBox IsEnabled="{Binding IsAccessible}"
-                                            Command="{Binding DataContext.AddBackupFolder, ElementName=Window}"
+                                            Command="{Binding DataContext.AddBackupFolder, RelativeSource={RelativeSource AncestorType=TreeView}}"
                                             CommandParameter="{Binding Mode=OneWay}"
                                             IsChecked="{Binding IsChecked}">
                                             <CheckBox.Content>
@@ -245,6 +245,9 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock>
+                                                    <Hyperlink Command="{Binding DataContext.RemoveBackupFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
+                                                        <Run Text="SİL" />
+                                                    </Hyperlink>
                                                     <Run Text="{Binding FolderName}" />
                                                     <Run Text="{Binding FolderFileCount, StringFormat={}{0} Dosya Var}" Foreground="Red">
                                                         <Run.ToolTip>
@@ -282,7 +285,19 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBox Text="{Binding Data.DataSavePath}" IsReadOnly="True" />
-                            <Button Content="KAYIT KLASÖRÜ" Grid.Column="1" Command="{Binding SetSaveLocation}" />
+                            <Button Grid.Column="1" Command="{Binding SetSaveLocation}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="16" Height="16">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                <Binding Source="Shell32.dll" />
+                                                <Binding Source="4" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
+                                    <TextBlock Text="KAYIT KLASÖRÜ" />
+                                </StackPanel>
+                            </Button>
                             <ListBox Grid.Row="1" Grid.ColumnSpan="2"
                                 Background="{x:Null}"
                                 BorderBrush="{x:Null}"

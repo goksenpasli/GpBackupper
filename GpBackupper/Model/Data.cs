@@ -57,6 +57,8 @@ namespace GpBackupper.View
 
         private string selectedDrive;
 
+        private ObservableCollection<string> selectedFiles = new();
+
         public Data()
         {
             SearchComputerFiles = new RelayCommand<object>(parameter =>
@@ -72,6 +74,17 @@ namespace GpBackupper.View
                     Active = true;
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }, parameter => !string.IsNullOrEmpty(SelectedDrive));
+
+            CompressSelectedFiles = new RelayCommand<object>(parameter =>
+            {
+                if (parameter is MainViewModel model)
+                {
+                    CompressorViewModel compressorViewModel = new();
+                    compressorViewModel.CompressorView.KayıtYolu = $@"{model.Data.DataSavePath}\{Guid.NewGuid()}.zip";
+                    compressorViewModel.CompressorView.Dosyalar = SelectedFiles;
+                    model.Compress(compressorViewModel);
+                }
+            }, parameter => !string.IsNullOrWhiteSpace((parameter as MainViewModel)?.Data.DataSavePath) && SelectedFiles.Any());
         }
 
         public bool Active
@@ -131,6 +144,8 @@ namespace GpBackupper.View
         }
 
         public IList<CommonFolders> CommonFolders => Enum.GetValues(typeof(CommonFolders)).Cast<CommonFolders>().ToList();
+
+        public ICommand CompressSelectedFiles { get; }
 
         public string DataSavePath
         {
@@ -299,6 +314,20 @@ namespace GpBackupper.View
                 {
                     selectedDrive = value;
                     OnPropertyChanged(nameof(SelectedDrive));
+                }
+            }
+        }
+
+        public ObservableCollection<string> SelectedFiles
+        {
+            get => selectedFiles;
+
+            set
+            {
+                if (selectedFiles != value)
+                {
+                    selectedFiles = value;
+                    OnPropertyChanged(nameof(SelectedFiles));
                 }
             }
         }

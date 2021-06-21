@@ -45,7 +45,10 @@ namespace GpBackupper
                     if (treeViewModel.IsChecked)
                     {
                         data = new() { FolderName = treeViewModel.Folder.FullName };
-                        Data.BackupFolders.Add(data);
+                        if (!Data.BackupFolders.Any(z => z.FolderName == data.FolderName))
+                        {
+                            Data.BackupFolders.Add(data);
+                        }
                     }
                     else
                     {
@@ -53,6 +56,14 @@ namespace GpBackupper
                     }
                 }
             }, parameter => true);
+
+            RemoveBackupFolder = new RelayCommand<object>(parameter =>
+             {
+                 if (parameter is Data selecteditem)
+                 {
+                     Data.BackupFolders.Remove(selecteditem);
+                 }
+             }, parameter => true);
 
             AddCommonFoldersBackupFolder = new RelayCommand<object>(parameter =>
             {
@@ -99,36 +110,8 @@ namespace GpBackupper
                 {
                     compressorViewModel.CompressorView.Dosyalar.Add(item);
                 }
+                Compress(compressorViewModel);
 
-                Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        Data.Active = false;
-                        using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
-                        switch (Data.Biçim)
-                        {
-                            case 0:
-                                {
-                                    using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
-                                    WriteData(writer, compressorViewModel);
-                                    break;
-                                }
-
-                            case 1:
-                                {
-                                    using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
-                                    WriteData(writer, compressorViewModel);
-                                    break;
-                                }
-                        }
-                        Data.Active = true;
-                    }
-                    catch (Exception Ex)
-                    {
-                        System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                    }
-                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ => compressorViewModel.CompressorView.Dosyalar.Clear(), TaskScheduler.FromCurrentSynchronizationContext());
             }, parameter => Data.BackupExtensions.Any() && Data.BackupFolders.Any() && !string.IsNullOrWhiteSpace(Data.DataSavePath));
 
             RemoveFileExtension = new RelayCommand<object>(parameter =>
@@ -160,6 +143,8 @@ namespace GpBackupper
 
         public ICommand OpenFile { get; }
 
+        public ICommand RemoveBackupFolder { get; }
+
         public ICommand RemoveFileExtension { get; }
 
         public ICommand ResetBuildInFileExtension { get; }
@@ -169,6 +154,40 @@ namespace GpBackupper
         public ICommand StartCompress { get; }
 
         public ICommand UpdateBuildInFileExtension { get; }
+
+        public void Compress(CompressorViewModel compressorViewModel)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    Data.Active = false;
+                    using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
+                    switch (Data.Biçim)
+                    {
+                        case 0:
+                            {
+                                using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
+                                WriteData(writer, compressorViewModel);
+                                break;
+                            }
+
+                        case 1:
+                            {
+                                using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
+                                WriteData(writer, compressorViewModel);
+                                break;
+                            }
+                    }
+                    Data.Active = true;
+                }
+                catch (Exception Ex)
+                {
+                    System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    Data.Active = true;
+                }
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ => compressorViewModel.CompressorView.Dosyalar.Clear(), TaskScheduler.FromCurrentSynchronizationContext());
+        }
 
         private bool ValidateExtensions(string documentExtensions)
         {
