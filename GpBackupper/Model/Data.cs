@@ -10,22 +10,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Shell;
 
 namespace GpBackupper.View
 {
-    public enum CommonFolders
-    {
-        Desktop = 0,
-
-        MyDocuments = 5,
-
-        MyMusic = 13,
-
-        MyPictures = 39,
-
-        MyVideos = 14,
-    }
-
     public class Data : InpcBase, IDataErrorInfo
     {
         private bool active = true;
@@ -55,6 +43,8 @@ namespace GpBackupper.View
         private ObservableCollection<string> foundFiles;
 
         private double oran;
+
+        private TaskbarItemProgressState progressState = TaskbarItemProgressState.Normal;
 
         private string searchFileName;
 
@@ -303,6 +293,20 @@ namespace GpBackupper.View
                 {
                     oran = value;
                     OnPropertyChanged(nameof(Oran));
+                }
+            }
+        }
+
+        public TaskbarItemProgressState ProgressState
+        {
+            get => progressState;
+
+            set
+            {
+                if (progressState != value)
+                {
+                    progressState = value;
+                    OnPropertyChanged(nameof(ProgressState));
                 }
             }
         }

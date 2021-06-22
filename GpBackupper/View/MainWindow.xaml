@@ -4,7 +4,7 @@
     xmlns:Extensions="clr-namespace:Extensions;assembly=Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:GpBackupper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:GpBackupper.Properties" xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:properties="clr-namespace:GpBackupper.Properties"
     Title="Yedekleyici"
     Width="800" Height="480"
     d:DataContext="{d:DesignInstance Type={x:Type local:MainViewModel}}"
@@ -19,7 +19,7 @@
         <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding Data.Oran}" />
+        <TaskbarItemInfo ProgressState="{Binding Data.ProgressState}" ProgressValue="{Binding Data.Oran}" />
     </Window.TaskbarItemInfo>
     <Grid>
         <TabControl>
@@ -53,31 +53,31 @@
                                 <ComboBoxItem Tag="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
                                         <Run Text="BELGELER" Foreground="Red" />
-                                        <Run Text="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}" />
+                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
                                         <Run Text="VİDEOLAR" Foreground="Red" />
-                                        <Run Text="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}" />
+                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
                                         <Run Text="SESLER" Foreground="Red" />
-                                        <Run Text="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}" />
+                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}">
                                     <TextBlock>
                                         <Run Text="RESİMLER" Foreground="Red" />
-                                        <Run Text="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}" />
+                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
                                     </TextBlock>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="ÖZEL UZANTILAR" Foreground="Red" VerticalAlignment="Center" />
-                                        <TextBox Text="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
+                                        <TextBox Text="{Binding CustomExtensions, ValidatesOnDataErrors=True, Source={x:Static properties:Settings.Default}}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
@@ -344,7 +344,9 @@
                                 <Button.Content>
                                     <Grid>
                                         <ProgressBar Style="{StaticResource ProgressBarStyle}" Maximum="1" Value="{Binding Data.Oran}" />
-                                        <TextBlock Text="BAŞLAT" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="BAŞLAT"
+                                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                                            FontSize="20" />
                                     </Grid>
                                 </Button.Content>
                             </Button>

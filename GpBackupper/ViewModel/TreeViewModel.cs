@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace GpBackupper
 {
-
     public class TreeViewModel : InpcBase
     {
         private List<TreeViewModel> _subFolders;
@@ -66,20 +65,6 @@ namespace GpBackupper
             }
         }
 
-        public bool IsChecked
-        {
-            get => ısChecked;
-
-            set
-            {
-                if (ısChecked != value)
-                {
-                    ısChecked = value;
-                    OnPropertyChanged(nameof(IsChecked));
-                }
-            }
-        }
-
         public bool IsAccessible
         {
             get => isaccessible;
@@ -90,6 +75,20 @@ namespace GpBackupper
                 {
                     isaccessible = value;
                     OnPropertyChanged(nameof(IsAccessible));
+                }
+            }
+        }
+
+        public bool IsChecked
+        {
+            get => ısChecked;
+
+            set
+            {
+                if (ısChecked != value)
+                {
+                    ısChecked = value;
+                    OnPropertyChanged(nameof(IsChecked));
                 }
             }
         }
@@ -128,6 +127,7 @@ namespace GpBackupper
                     catch (UnauthorizedAccessException)
                     {
                         IsAccessible = false;
+                        IsChecked = false;
                     }
                 }
                 return _subFolders;

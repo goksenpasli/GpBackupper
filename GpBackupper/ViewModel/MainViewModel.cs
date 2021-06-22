@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Shell;
 
 namespace GpBackupper
 {
@@ -22,7 +23,6 @@ namespace GpBackupper
         public MainViewModel()
         {
             Data = new Data();
-
             AddBackupFileExtensions = new RelayCommand<object>(parameter =>
             {
                 if (parameter is string fileextensions)
@@ -111,7 +111,6 @@ namespace GpBackupper
                     compressorViewModel.CompressorView.Dosyalar.Add(item);
                 }
                 Compress(compressorViewModel);
-
             }, parameter => Data.BackupExtensions.Any() && Data.BackupFolders.Any() && !string.IsNullOrWhiteSpace(Data.DataSavePath));
 
             RemoveFileExtension = new RelayCommand<object>(parameter =>
@@ -129,7 +128,6 @@ namespace GpBackupper
                 ValidateExtensions(Properties.Settings.Default.VideoExtensions) &&
                 ValidateExtensions(Properties.Settings.Default.PictureExtensions);
             });
-
             ResetBuildInFileExtension = new RelayCommand<object>(parameter => Properties.Settings.Default.Reset(), parameter => true);
         }
 
@@ -162,6 +160,7 @@ namespace GpBackupper
                 try
                 {
                     Data.Active = false;
+                    Data.ProgressState = TaskbarItemProgressState.Normal;
                     using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
                     switch (Data.Biçim)
                     {
@@ -183,8 +182,9 @@ namespace GpBackupper
                 }
                 catch (Exception Ex)
                 {
-                    System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    Data.ProgressState = TaskbarItemProgressState.Error;
                     Data.Active = true;
+                    System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ => compressorViewModel.CompressorView.Dosyalar.Clear(), TaskScheduler.FromCurrentSynchronizationContext());
         }
