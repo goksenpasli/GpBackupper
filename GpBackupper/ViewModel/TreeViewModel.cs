@@ -1,12 +1,14 @@
 ﻿using Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
 
 namespace GpBackupper
 {
-    public class TreeViewModel : InpcBase
+    public class TreeViewModel : MainViewModel
     {
         private List<TreeViewModel> _subFolders;
 
@@ -21,6 +23,27 @@ namespace GpBackupper
         private bool isaccessible = true;
 
         private string name;
+
+        public TreeViewModel()
+        {
+            CompressAllSubFiles = new RelayCommand<object>(parameter =>
+            {
+                if (parameter is string fullpath)
+                {
+                    ConcurrentBag<string> files = fullpath.DirSearch();
+                    CompressorViewModel compressorViewModel = new();
+                    compressorViewModel.CompressorView.Dosyalar = new();
+                    compressorViewModel.CompressorView.KayıtYolu = $@"{fullpath}\{Guid.NewGuid()}.zip";
+                    foreach (string item in files)
+                    {
+                        compressorViewModel.CompressorView.Dosyalar.Add(item);
+                    }
+                    Compress(compressorViewModel);
+                }
+            }, parameter => true);
+        }
+
+        public ICommand CompressAllSubFiles { get; }
 
         public IEnumerable<string> Drives
         {

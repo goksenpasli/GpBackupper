@@ -219,12 +219,33 @@
                                 <TreeView.Resources>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}">
                                         <CheckBox IsEnabled="{Binding IsAccessible}"
+                                            VerticalContentAlignment="Center"
                                             Command="{Binding DataContext.AddBackupFolder, RelativeSource={RelativeSource AncestorType=TreeView}}"
                                             CommandParameter="{Binding Mode=OneWay}"
                                             IsChecked="{Binding IsChecked}">
+                                            <CheckBox.ContextMenu>
+                                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
+                                                    <MenuItem Header="ALT KLASÖRLERİ YEDEKLE" Command="{Binding CompressAllSubFiles}" CommandParameter="{Binding FullPath}">
+                                                        <MenuItem.Icon>
+                                                            <Image Width="16" Height="16">
+                                                                <Image.Source>
+                                                                    <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                                        <Binding Source="zipfldr.dll" />
+                                                                        <Binding Source="0" />
+                                                                    </MultiBinding>
+                                                                </Image.Source>
+                                                            </Image>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                </ContextMenu>
+                                            </CheckBox.ContextMenu>
                                             <CheckBox.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Width="16" Height="16">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Image Grid.Column="0" Width="32" Height="32">
                                                         <Image.Source>
                                                             <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
                                                                 <Binding Source="Shell32.dll" />
@@ -232,8 +253,15 @@
                                                             </MultiBinding>
                                                         </Image.Source>
                                                     </Image>
-                                                    <TextBlock Text="{Binding Name}" />
-                                                </StackPanel>
+                                                    <ProgressBar Grid.Column="1"
+                                                        Height="32"
+                                                        BorderBrush="Transparent"
+                                                        Margin="-2"
+                                                        Style="{StaticResource ProgressBarStyle}"
+                                                        Maximum="1" Orientation="Vertical"
+                                                        Value="{Binding Data.Oran}" />
+                                                    <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" />
+                                                </Grid>
                                             </CheckBox.Content>
                                         </CheckBox>
                                     </HierarchicalDataTemplate>
