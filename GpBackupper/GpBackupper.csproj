@@ -66,10 +66,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\CloneConverter.cs" />
     <Compile Include="Converters\CommonExtensionImageVisibilityConverter.cs" />
     <Compile Include="Converters\DriveConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="Model\CommonFolders.cs" />
+    <Compile Include="ViewModel\SearchControlViewModel.cs" />
     <Compile Include="View\SearchWindowControl.xaml.cs">
       <DependentUpon>SearchWindowControl.xaml</DependentUpon>
     </Compile>

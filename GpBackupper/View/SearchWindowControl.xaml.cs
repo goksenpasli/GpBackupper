@@ -11,9 +11,6 @@ namespace GpBackupper
         public SearchWindowControl()
         {
             InitializeComponent();
-            Cvs = TryFindResource("Cvs") as CollectionViewSource;
         }
-
-        public static CollectionViewSource Cvs { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace GpBackupper
 
         private IEnumerable<string> drives = DriveInfo.GetDrives().Where(z => z.DriveType == DriveType.Fixed).Select(z => z.Name);
 
+        private bool filteredExtensionCompress;
+
         private DirectoryInfo folder = new(@"C:\");
 
         private string fullPath;
@@ -28,15 +30,26 @@ namespace GpBackupper
         {
             CompressAllSubFiles = new RelayCommand<object>(parameter =>
             {
-                if (parameter is string fullpath)
+                if (parameter is object[] datacontext)
                 {
-                    ConcurrentBag<string> files = fullpath.DirSearch();
+                    ConcurrentBag<string> files = (datacontext[0] as TreeViewModel).FullPath.DirSearch();
                     CompressorViewModel compressorViewModel = new();
                     compressorViewModel.CompressorView.Dosyalar = new();
-                    compressorViewModel.CompressorView.KayıtYolu = $@"{fullpath}\{Guid.NewGuid()}.zip";
-                    foreach (string item in files)
+                    compressorViewModel.CompressorView.KayıtYolu = $@"{(datacontext[0] as TreeViewModel)?.FullPath}\{Guid.NewGuid()}.zip";
+                    if (FilteredExtensionCompress)
                     {
-                        compressorViewModel.CompressorView.Dosyalar.Add(item);
+                        IEnumerable<string> backupextensions = (datacontext[1] as MainViewModel).Data.BackupExtensions.Select(z => z.Extension.ToLower());
+                        foreach (string item in files.Where(z => backupextensions.Contains($"*{Path.GetExtension(z)}")))
+                        {
+                            compressorViewModel.CompressorView.Dosyalar.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        foreach (string item in files)
+                        {
+                            compressorViewModel.CompressorView.Dosyalar.Add(item);
+                        }
                     }
                     Compress(compressorViewModel);
                 }
@@ -55,6 +68,20 @@ namespace GpBackupper
                 {
                     drives = value;
                     OnPropertyChanged(nameof(Drives));
+                }
+            }
+        }
+
+        public bool FilteredExtensionCompress
+        {
+            get => filteredExtensionCompress;
+
+            set
+            {
+                if (filteredExtensionCompress != value)
+                {
+                    filteredExtensionCompress = value;
+                    OnPropertyChanged(nameof(FilteredExtensionCompress));
                 }
             }
         }

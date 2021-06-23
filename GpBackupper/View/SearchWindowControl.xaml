@@ -5,11 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:GpBackupper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:GpBackupper.View"
-    d:DataContext="{d:DesignInstance Type=view:Data}"
+    d:DataContext="{d:DesignInstance Type=local:SearchControlViewModel}"
     d:DesignHeight="350" d:DesignWidth="450" UseLayoutRounding="True"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <CollectionViewSource x:Key="Cvs" Source="{Binding FoundFiles}" />
+        <CollectionViewSource x:Key="Cvs" Source="{Binding Data.FoundFiles}" />
     </UserControl.Resources>
     <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
         <Grid>
@@ -20,8 +20,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <UniformGrid IsEnabled="{Binding Active}" Columns="2">
-                <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <UniformGrid IsEnabled="{Binding Data.Active}" Columns="2">
+                <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding Data.SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -38,7 +38,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Extension}">
+                <Button Command="{Binding SearchComputerFiles}" CommandParameter="{Binding Parent.Parent.DataContext.Extension, RelativeSource={RelativeSource AncestorType=UserControl}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16">
                             <Image.Source>
@@ -53,9 +53,6 @@
                 </Button>
             </UniformGrid>
             <UniformGrid x:Name="Ug" Grid.Row="1" Columns="2">
-                <UniformGrid.DataContext>
-                    <local:MainViewModel />
-                </UniformGrid.DataContext>
                 <TextBox Text="{Binding Data.DataSavePath}" IsReadOnly="True" />
                 <Button Grid.Column="1" Command="{Binding SetSaveLocation, Mode=OneWay}">
                     <Button.Content>
@@ -73,7 +70,7 @@
                     </Button.Content>
                 </Button>
             </UniformGrid>
-            <Button Grid.Row="2" Command="{Binding CompressSelectedFiles, Mode=OneWay}" CommandParameter="{Binding DataContext, ElementName=Ug}">
+            <Button Grid.Row="2" Command="{Binding CompressSelectedFiles, Mode=OneWay}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16">
@@ -90,8 +87,8 @@
             </Button>
             <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" CharacterCasing="Lower" />
             <ListBox Grid.Row="4"
-                ItemsSource="{Binding FoundFiles}"
-                Extensions:ListBoxHelper.SelectedItems="{Binding SelectedFiles}"
+                ItemsSource="{Binding Data.FoundFiles}"
+                Extensions:ListBoxHelper.SelectedItems="{Binding Data.SelectedFiles}"
                 IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

@@ -15,6 +15,7 @@
         <local:CommonExtensionImageVisibilityConverter x:Key="CommonExtensionImageVisibilityConverter" />
         <Extensions:FilePathToIconConverter x:Key="FilePathToIconConverter" />
         <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter" />
+        <local:CloneConverter x:Key="CloneConverter" />
         <local:DriveConverter x:Key="DriveConverter" />
         <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:TreeViewModel}" />
     </Window.Resources>
@@ -117,6 +118,9 @@
                                                 </BindingGroup>
                                             </StackPanel.BindingGroup>
                                             <Extensions:ContentToggleButton Background="Transparent" BorderBrush="Transparent">
+                                                <Extensions:ContentToggleButton.DataContext>
+                                                    <local:SearchControlViewModel />
+                                                </Extensions:ContentToggleButton.DataContext>
                                                 <Extensions:ContentToggleButton.OverContent>
                                                     <Canvas Width="24" Height="30">
                                                         <Image Canvas.Left="4" Width="16" Height="16">
@@ -130,8 +134,8 @@
                                                         <ProgressBar Canvas.Bottom="0"
                                                             Width="24" Height="14"
                                                             Style="{StaticResource ProgressBarStyle}"
-                                                            IsIndeterminate="{Binding Active, Converter={StaticResource ReverseBooleanConverter}}" />
-                                                        <TextBlock Text="{Binding FoundFiles.Count}"
+                                                            IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" />
+                                                        <TextBlock Text="{Binding Data.FoundFiles.Count}"
                                                             Canvas.Left="2" Canvas.Bottom="2"
                                                             FontSize="8" />
                                                     </Canvas>
@@ -222,10 +226,20 @@
                                             VerticalContentAlignment="Center"
                                             Command="{Binding DataContext.AddBackupFolder, RelativeSource={RelativeSource AncestorType=TreeView}}"
                                             CommandParameter="{Binding Mode=OneWay}"
-                                            IsChecked="{Binding IsChecked}">
+                                            IsChecked="{Binding IsChecked}"
+                                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TreeView}}">
                                             <CheckBox.ContextMenu>
-                                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
-                                                    <MenuItem Header="ALT KLASÖRLERİ YEDEKLE" Command="{Binding CompressAllSubFiles}" CommandParameter="{Binding FullPath}">
+                                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}" d:DataContext="{d:DesignInstance Type=local:TreeViewModel}">
+                                                    <MenuItem Command="{Binding CompressAllSubFiles}">
+                                                        <MenuItem.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource CloneConverter}">
+                                                                <Binding Mode="OneWay" />
+                                                                <Binding Path="Parent.PlacementTarget.Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                                                            </MultiBinding>
+                                                        </MenuItem.CommandParameter>
+                                                        <MenuItem.Header>
+                                                            <CheckBox Content="ALT KLASÖRLERİ YEDEKLE" IsChecked="{Binding FilteredExtensionCompress}" ToolTip="Bu İşaretlenirse Alt Klasör Yedeklemede Soldaki Filtreler Kullanılır." />
+                                                        </MenuItem.Header>
                                                         <MenuItem.Icon>
                                                             <Image Width="16" Height="16">
                                                                 <Image.Source>
@@ -255,6 +269,7 @@
                                                     </Image>
                                                     <ProgressBar Grid.Column="1"
                                                         Height="32"
+                                                        Foreground="{StaticResource PinkProgressBackground}"
                                                         BorderBrush="Transparent"
                                                         Margin="-2"
                                                         Style="{StaticResource ProgressBarStyle}"
