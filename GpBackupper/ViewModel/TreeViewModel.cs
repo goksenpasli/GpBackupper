@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace GpBackupper
@@ -33,25 +34,32 @@ namespace GpBackupper
                 if (parameter is object[] datacontext)
                 {
                     ConcurrentBag<string> files = (datacontext[0] as TreeViewModel).FullPath.DirSearch();
-                    CompressorViewModel compressorViewModel = new();
-                    compressorViewModel.CompressorView.Dosyalar = new();
-                    compressorViewModel.CompressorView.KayıtYolu = $@"{(datacontext[0] as TreeViewModel)?.FullPath}\{Guid.NewGuid()}.zip";
-                    if (FilteredExtensionCompress)
+                    if (files.Count != 0)
                     {
-                        IEnumerable<string> backupextensions = (datacontext[1] as MainViewModel).Data.BackupExtensions.Select(z => z.Extension.ToLower());
-                        foreach (string item in files.Where(z => backupextensions.Contains($"*{Path.GetExtension(z)}")))
+                        CompressorViewModel compressorViewModel = new();
+                        compressorViewModel.CompressorView.Dosyalar = new();
+                        compressorViewModel.CompressorView.KayıtYolu = $@"{(datacontext[0] as TreeViewModel)?.FullPath}\{Guid.NewGuid()}.zip";
+                        if (FilteredExtensionCompress)
                         {
-                            compressorViewModel.CompressorView.Dosyalar.Add(item);
+                            IEnumerable<string> backupextensions = (datacontext[1] as MainViewModel).Data.BackupExtensions.Select(z => z.Extension.ToLower());
+                            foreach (string item in files.Where(z => backupextensions.Contains($"*{Path.GetExtension(z)}")))
+                            {
+                                compressorViewModel.CompressorView.Dosyalar.Add(item);
+                            }
                         }
+                        else
+                        {
+                            foreach (string item in files)
+                            {
+                                compressorViewModel.CompressorView.Dosyalar.Add(item);
+                            }
+                        }
+                        Compress(compressorViewModel);
                     }
                     else
                     {
-                        foreach (string item in files)
-                        {
-                            compressorViewModel.CompressorView.Dosyalar.Add(item);
-                        }
+                        MessageBox.Show("Klasörde Hiç Dosya Yok.", "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    Compress(compressorViewModel);
                 }
             }, parameter => true);
         }
