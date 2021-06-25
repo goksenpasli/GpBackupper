@@ -31,17 +31,17 @@ namespace GpBackupper
         {
             CompressAllSubFiles = new RelayCommand<object>(parameter =>
             {
-                if (parameter is object[] datacontext)
+                if (parameter is object[] datacontext && datacontext[0] is TreeViewModel treviewmodel && datacontext[1] is MainViewModel mainViewModel)
                 {
-                    ConcurrentBag<string> files = (datacontext[0] as TreeViewModel).FullPath.DirSearch();
+                    ConcurrentBag<string> files = treviewmodel.FullPath.DirSearch();
                     if (files.Count != 0)
                     {
                         CompressorViewModel compressorViewModel = new();
                         compressorViewModel.CompressorView.Dosyalar = new();
-                        compressorViewModel.CompressorView.KayıtYolu = $@"{(datacontext[0] as TreeViewModel)?.FullPath}\{Guid.NewGuid()}.zip";
+                        compressorViewModel.CompressorView.KayıtYolu = $@"{treviewmodel.FullPath}\{Guid.NewGuid()}.zip";
                         if (FilteredExtensionCompress)
                         {
-                            IEnumerable<string> backupextensions = (datacontext[1] as MainViewModel).Data.BackupExtensions.Select(z => z.Extension.ToLower());
+                            IEnumerable<string> backupextensions = mainViewModel.Data.BackupExtensions.Select(z => z.Extension.ToLower());
                             foreach (string item in files.Where(z => backupextensions.Contains($"*{Path.GetExtension(z)}")))
                             {
                                 compressorViewModel.CompressorView.Dosyalar.Add(item);

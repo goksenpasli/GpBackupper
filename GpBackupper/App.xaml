@@ -35,7 +35,7 @@
                     <Canvas x:Name="Cnv"
                         Width="18" Height="18"
                         Background="{StaticResource Dur}"
-                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        HorizontalAlignment="Right" VerticalAlignment="Top"
                         DataContext="{Binding ElementName=Adorner, Mode=OneWay}"
                         RenderTransformOrigin="0.5,0.5" UseLayoutRounding="True">
                         <Canvas.ToolTip>
