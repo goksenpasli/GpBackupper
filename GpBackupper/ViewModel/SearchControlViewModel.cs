@@ -14,6 +14,10 @@ namespace GpBackupper
 {
     public class SearchControlViewModel : MainViewModel
     {
+        private static long fileSizeSum;
+
+        private ObservableCollection<Files> foundFiles;
+
         private string searchFileName;
 
         public SearchControlViewModel()
@@ -23,22 +27,26 @@ namespace GpBackupper
                 CompressorViewModel compressorViewModel = new();
                 compressorViewModel.CompressorView.Dosyalar = new();
                 compressorViewModel.CompressorView.KayıtYolu = $@"{Data.DataSavePath}\{Guid.NewGuid()}.zip";
-                foreach (Files item in Data.FoundFiles.Where(z => z.IsChecked))
+                foreach (Files item in FoundFiles.Where(z => z.IsChecked))
                 {
                     compressorViewModel.CompressorView.Dosyalar.Add(item.FileName);
                 }
                 Compress(compressorViewModel);
-            }, parameter => !string.IsNullOrWhiteSpace(Data.DataSavePath) && Data.FoundFiles.Any(z => z.IsChecked));
+            }, parameter => !string.IsNullOrWhiteSpace(Data.DataSavePath) && FoundFiles.Any(z => z.IsChecked));
 
             SearchComputerFiles = new RelayCommand<object>(parameter =>
             {
                 Task.Factory.StartNew(() =>
                 {
                     Data.Active = false;
-                    Data.FoundFiles = new ObservableCollection<Files>();
+                    FoundFiles = new ObservableCollection<Files>();
                     foreach (string item in Data.SelectedDrive.DirSearch(parameter as string))
                     {
-                        Application.Current.Dispatcher.BeginInvoke(new Action(() => Data.FoundFiles.Add(new Files() { FileName = item, FileSize = new FileInfo(item).Length / 1024 })));
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Files file = new Files() { FileName = item, FileSize = new FileInfo(item).Length / 1024 };
+                            FoundFiles.Add(file);
+                        }));
                     }
                     Data.Active = true;
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
@@ -46,19 +54,49 @@ namespace GpBackupper
 
             SelectAllFiles = new RelayCommand<object>(parameter =>
             {
-                foreach (Files item in Data.FoundFiles)
+                foreach (Files item in FoundFiles)
                 {
                     if (parameter is bool menuchecked)
                     {
                         item.IsChecked = menuchecked;
                     }
                 }
-            }, parameter => Data.FoundFiles.Any());
+            }, parameter => FoundFiles.Any());
 
             PropertyChanged += SearchControlViewModel_PropertyChanged;
         }
 
+        public static new event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+
+        public static long FileSizeSum
+        {
+            get => fileSizeSum;
+
+            set
+            {
+                if (fileSizeSum != value)
+                {
+                    fileSizeSum = value;
+                    StaticPropertyChanged?.Invoke(null, new(nameof(FileSizeSum)));
+                }
+            }
+        }
+
         public ICommand CompressSelectedFiles { get; }
+
+        public ObservableCollection<Files> FoundFiles
+        {
+            get => foundFiles;
+
+            set
+            {
+                if (foundFiles != value)
+                {
+                    foundFiles = value;
+                    OnPropertyChanged(nameof(FoundFiles));
+                }
+            }
+        }
 
         public ICommand SearchComputerFiles { get; }
 
@@ -80,9 +118,20 @@ namespace GpBackupper
 
         private void SearchControlViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SearchFileName" && Data.FoundFiles?.Any() == true)
+            if (e.PropertyName == "SearchFileName" && FoundFiles?.Any() == true)
             {
-                CollectionViewSource.GetDefaultView(Data.FoundFiles).Filter = string.IsNullOrWhiteSpace(SearchFileName) ? null : item => (item as Files)?.FileName.ToLower().Contains(SearchFileName) ?? false;
+                CollectionViewSource.GetDefaultView(FoundFiles).Filter = string.IsNullOrWhiteSpace(SearchFileName) ? null : item => (item as Files)?.FileName.ToLower().Contains(SearchFileName) ?? false;
+            }
+            if (e.PropertyName == "IsChecked" && sender is Files file)
+            {
+                if (file.IsChecked)
+                {
+                    FileSizeSum += file.FileSize;
+                }
+                else
+                {
+                    FileSizeSum -= file.FileSize;
+                }
             }
         }
     }

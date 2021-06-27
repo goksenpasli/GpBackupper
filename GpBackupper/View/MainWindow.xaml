@@ -135,7 +135,7 @@
                                                             Width="24" Height="14"
                                                             Style="{StaticResource ProgressBarStyle}"
                                                             IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" />
-                                                        <TextBlock Text="{Binding Data.FoundFiles.Count}"
+                                                        <TextBlock Text="{Binding FoundFiles.Count}"
                                                             Canvas.Left="2" Canvas.Bottom="2"
                                                             FontSize="8" />
                                                     </Canvas>

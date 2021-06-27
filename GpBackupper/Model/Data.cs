@@ -36,8 +36,6 @@ namespace GpBackupper
 
         private string folderName;
 
-        private ObservableCollection<Files> foundFiles;
-
         private double oran;
 
         private TaskbarItemProgressState progressState = TaskbarItemProgressState.Normal;
@@ -225,20 +223,6 @@ namespace GpBackupper
                     {
                     }
                     OnPropertyChanged(nameof(FolderName));
-                }
-            }
-        }
-
-        public ObservableCollection<Files> FoundFiles
-        {
-            get => foundFiles;
-
-            set
-            {
-                if (foundFiles != value)
-                {
-                    foundFiles = value;
-                    OnPropertyChanged(nameof(FoundFiles));
                 }
             }
         }
