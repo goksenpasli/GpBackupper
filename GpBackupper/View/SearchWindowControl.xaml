@@ -11,7 +11,13 @@
     <UserControl.Resources>
         <CollectionViewSource x:Key="Cvs" Source="{Binding Data.FoundFiles}" />
     </UserControl.Resources>
-    <GroupBox Header="BİLGİSAYARDAKİ DOSYALAR">
+    <GroupBox>
+        <GroupBox.Header>
+            <StackPanel Orientation="Horizontal">
+                <Image Width="16" Height="16" Source="{Binding Parent.Parent.DataContext.Extension, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource FilePathToIconConverter}, Mode=OneWay}" />
+                <TextBlock Text="BİLGİSAYARDAKİ DOSYALAR" />
+            </StackPanel>
+        </GroupBox.Header>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -90,12 +96,26 @@
                 ItemsSource="{Binding Data.FoundFiles}"
                 Extensions:ListBoxHelper.SelectedItems="{Binding Data.SelectedFiles}"
                 IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem IsCheckable="True" Header="TÜMÜNÜ SEÇ" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}" Command="{Binding SelectAllFiles}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="IsSelected" Value="{Binding IsChecked}" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
-                            <TextBlock><Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding Mode=OneWay}">
-                                    <Run Text="{Binding Mode=OneWay}" />
-                                </Hyperlink></TextBlock>
+                        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsChecked}">
+                            <TextBlock>
+                                <Hyperlink Command="{Binding DataContext.OpenFile, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding FileName, Mode=OneWay}">
+                                    <Run Text="{Binding FileName, Mode=OneWay}" />
+                                </Hyperlink>
+                            </TextBlock>
                         </CheckBox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

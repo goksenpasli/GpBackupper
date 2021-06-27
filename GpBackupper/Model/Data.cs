@@ -36,7 +36,7 @@ namespace GpBackupper
 
         private string folderName;
 
-        private ObservableCollection<string> foundFiles;
+        private ObservableCollection<Files> foundFiles;
 
         private double oran;
 
@@ -44,7 +44,7 @@ namespace GpBackupper
 
         private string selectedDrive;
 
-        private ObservableCollection<string> selectedFiles = new();
+        private ObservableCollection<Files> selectedFiles = new();
 
         public bool Active
         {
@@ -231,7 +231,7 @@ namespace GpBackupper
             }
         }
 
-        public ObservableCollection<string> FoundFiles
+        public ObservableCollection<Files> FoundFiles
         {
             get => foundFiles;
 
@@ -287,7 +287,7 @@ namespace GpBackupper
             }
         }
 
-        public ObservableCollection<string> SelectedFiles
+        public ObservableCollection<Files> SelectedFiles
         {
             get => selectedFiles;
 
