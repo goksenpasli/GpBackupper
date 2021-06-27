@@ -131,7 +131,8 @@
                                                                 </MultiBinding>
                                                             </Image.Source>
                                                         </Image>
-                                                        <ProgressBar Canvas.Bottom="0"
+                                                        <ProgressBar x:Name="Pb"
+                                                            Canvas.Bottom="0"
                                                             Width="24" Height="14"
                                                             Style="{StaticResource ProgressBarStyle}"
                                                             IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" />
@@ -162,7 +163,7 @@
                                                 <Run Text="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extension, ValidatesOnDataErrors=True}" />
                                                 <LineBreak />
                                                 <Run Text="{Binding Path=Extension, Converter={StaticResource FilePathToFileDescriptionConverter}, Mode=OneWay}" />
-                                                <Hyperlink IsEnabled="{Binding Active}" Command="{Binding DataContext.RemoveFileExtension, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
+                                                <Hyperlink IsEnabled="{Binding ElementName=Pb, Path=IsIndeterminate, Converter={StaticResource ReverseBooleanConverter}}" Command="{Binding DataContext.RemoveFileExtension, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" CommandParameter="{Binding Mode=OneWay}">
                                                     <Run Text=" SİL" ToolTip="Bu Uzantıyı Sil" />
                                                 </Hyperlink>
                                             </TextBlock>
