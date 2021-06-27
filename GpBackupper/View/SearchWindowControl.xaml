@@ -88,7 +88,7 @@
                 </Button.Content>
             </Button>
             <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" CharacterCasing="Lower" />
-            <ListBox Grid.Row="4"
+            <ListBox Grid.Row="4" VirtualizingStackPanel.VirtualizationMode="Recycling"
                 ItemsSource="{Binding FoundFiles}"
                 IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
                 <ListBox.ContextMenu>
