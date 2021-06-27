@@ -71,7 +71,7 @@
     <Compile Include="Converters\DriveConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="Model\CommonFolders.cs" />
-    <Compile Include="ViewModel\Files.cs" />
+    <Compile Include="Model\Files.cs" />
     <Compile Include="ViewModel\SearchControlViewModel.cs" />
     <Compile Include="View\SearchWindowControl.xaml.cs">
       <DependentUpon>SearchWindowControl.xaml</DependentUpon>
