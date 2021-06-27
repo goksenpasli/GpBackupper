@@ -28,7 +28,7 @@ namespace GpBackupper
 
         private string fileName;
 
-        private int? fileSize;
+        private long? fileSize;
 
         private IEnumerable<object> folderExtensions;
 
@@ -43,8 +43,6 @@ namespace GpBackupper
         private TaskbarItemProgressState progressState = TaskbarItemProgressState.Normal;
 
         private string selectedDrive;
-
-        private ObservableCollection<Files> selectedFiles = new();
 
         public bool Active
         {
@@ -162,7 +160,7 @@ namespace GpBackupper
             }
         }
 
-        public int? FileSize
+        public long? FileSize
         {
             get => fileSize;
 
@@ -283,20 +281,6 @@ namespace GpBackupper
                 {
                     selectedDrive = value;
                     OnPropertyChanged(nameof(SelectedDrive));
-                }
-            }
-        }
-
-        public ObservableCollection<Files> SelectedFiles
-        {
-            get => selectedFiles;
-
-            set
-            {
-                if (selectedFiles != value)
-                {
-                    selectedFiles = value;
-                    OnPropertyChanged(nameof(SelectedFiles));
                 }
             }
         }

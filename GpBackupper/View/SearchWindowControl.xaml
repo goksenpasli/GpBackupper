@@ -25,6 +25,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <UniformGrid IsEnabled="{Binding Data.Active}" Columns="2">
                 <ComboBox ItemsSource="{Binding Drives, Source={StaticResource FolderDataProvider}}" SelectedItem="{Binding Data.SelectedDrive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -92,13 +93,16 @@
                 </Button.Content>
             </Button>
             <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" CharacterCasing="Lower" />
-            <ListBox Grid.Row="4"
+            <ListBox x:Name="Lb"
+                Grid.Row="4"
                 ItemsSource="{Binding Data.FoundFiles}"
-                Extensions:ListBoxHelper.SelectedItems="{Binding Data.SelectedFiles}"
                 IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem IsCheckable="True" Header="TÜMÜNÜ SEÇ" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}" Command="{Binding SelectAllFiles}" />
+                        <MenuItem Header="TÜMÜNÜ SEÇ"
+                            Command="{Binding SelectAllFiles}"
+                            CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+                            IsCheckable="True" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemContainerStyle>
@@ -120,6 +124,14 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <StatusBar Grid.Row="6">
+                <StatusBarItem>
+                    <TextBlock Text="{Binding Data.FoundFiles.Count, StringFormat={}{0} öğe}" />
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock Text="{Binding SelectedItem.FileSize, ElementName=Lb, StringFormat={}{0} KB}" />
+                </StatusBarItem>
+            </StatusBar>
         </Grid>
     </GroupBox>
 </UserControl>
