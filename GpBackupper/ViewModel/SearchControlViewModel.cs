@@ -61,7 +61,7 @@ namespace GpBackupper
                         item.IsChecked = menuchecked;
                     }
                 }
-            }, parameter =>FoundFiles is not null && !CollectionViewSource.GetDefaultView(FoundFiles).IsEmpty);
+            }, parameter => FoundFiles is not null && !CollectionViewSource.GetDefaultView(FoundFiles).IsEmpty);
 
             PropertyChanged += SearchControlViewModel_PropertyChanged;
         }
