@@ -18,7 +18,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -87,39 +86,46 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" CharacterCasing="Lower" />
-            <ListBox Grid.Row="4" VirtualizingStackPanel.VirtualizationMode="Recycling"
+            <ListView Grid.Row="3"
                 ItemsSource="{Binding FoundFiles}"
-                IsSynchronizedWithCurrentItem="False" SelectionMode="Extended">
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="TÜMÜNÜ SEÇ"
-                            Command="{Binding SelectAllFiles}"
-                            CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-                            IsCheckable="True" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="VerticalContentAlignment" Value="Center" />
-                        <Setter Property="IsSelected" Value="{Binding IsChecked}" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsChecked}">
-                            <TextBlock>
-                                <Hyperlink Command="{Binding OpenFile, Mode=OneWay}" CommandParameter="{Binding FileName, Mode=OneWay}">
-                                    <Run Text="{Binding FileName, Mode=OneWay}" />
-                                </Hyperlink>
-                                <Run Text="{Binding FileSize, StringFormat={}{0} KB}" FontWeight="Bold" />
-                            </TextBlock>
-                        </CheckBox>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <StatusBar Grid.Row="6">
+                IsSynchronizedWithCurrentItem="False" SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="32">
+                            <GridViewColumn.Header>
+                                <CheckBox Command="{Binding SelectAllFiles}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}" />
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="300">
+                            <GridViewColumn.Header>
+                                <UniformGrid Columns="3">
+                                    <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Grid.Row="3"
+                                        Width="100"
+                                        CharacterCasing="Lower" />
+                                    <TextBlock Text="AD" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </UniformGrid>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Hyperlink Command="{Binding OpenFile, Mode=OneWay}" CommandParameter="{Binding FileName, Mode=OneWay}">
+                                            <Run Text="{Binding FileName, Mode=OneWay}" />
+                                        </Hyperlink>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="BOYUT" Width="100" DisplayMemberBinding="{Binding FileSize, StringFormat={}{0} KB}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StatusBar Grid.Row="4">
                 <StatusBarItem>
                     <TextBlock Text="{Binding FoundFiles.Count, StringFormat={}{0} öğe}" />
                 </StatusBarItem>

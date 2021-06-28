@@ -54,14 +54,14 @@ namespace GpBackupper
 
             SelectAllFiles = new RelayCommand<object>(parameter =>
             {
-                foreach (Files item in FoundFiles)
+                foreach (Files item in CollectionViewSource.GetDefaultView(FoundFiles))
                 {
                     if (parameter is bool menuchecked)
                     {
                         item.IsChecked = menuchecked;
                     }
                 }
-            }, parameter => FoundFiles.Any());
+            }, parameter =>FoundFiles is not null && !CollectionViewSource.GetDefaultView(FoundFiles).IsEmpty);
 
             PropertyChanged += SearchControlViewModel_PropertyChanged;
         }
