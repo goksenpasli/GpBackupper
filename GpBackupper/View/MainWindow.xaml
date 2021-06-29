@@ -27,7 +27,7 @@
             <TabItem Header="YEDEKLEME">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" />
+                        <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -134,8 +134,26 @@
                                                         <ProgressBar x:Name="Pb"
                                                             Canvas.Bottom="0"
                                                             Width="24" Height="14"
-                                                            Style="{StaticResource ProgressBarStyle}"
-                                                            IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" />
+                                                            IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}"
+                                                            ToolTipService.ShowDuration="60000">
+                                                            <ProgressBar.Style>
+                                                                <Style BasedOn="{StaticResource ProgressBarStyle}" TargetType="ProgressBar">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" Value="true">
+                                                                            <Setter Property="ToolTip">
+                                                                                <Setter.Value>
+                                                                                    <ProgressBar Width="320" Height="213"
+                                                                                        Foreground="{StaticResource BitmapCachedFlag}"
+                                                                                        Style="{StaticResource ProgressBarStyle}"
+                                                                                        Maximum="1"
+                                                                                        Value="{Binding Data.Oran}" />
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </ProgressBar.Style>
+                                                        </ProgressBar>
                                                         <TextBlock Text="{Binding FoundFiles.Count}"
                                                             Canvas.Left="2" Canvas.Bottom="2"
                                                             FontSize="8" />
@@ -387,7 +405,10 @@
                                 Command="{Binding StartCompress}">
                                 <Button.Content>
                                     <Grid>
-                                        <ProgressBar Style="{StaticResource ProgressBarStyle}" Maximum="1" Value="{Binding Data.Oran}" />
+                                        <ProgressBar Foreground="{StaticResource BitmapCachedFlag}"
+                                            Style="{StaticResource ProgressBarStyle}"
+                                            Maximum="1"
+                                            Value="{Binding Data.Oran}" />
                                         <TextBlock Text="BAŞLAT"
                                             HorizontalAlignment="Center" VerticalAlignment="Center"
                                             FontSize="20" />
