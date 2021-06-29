@@ -130,14 +130,8 @@
                                                                     <Binding Source="22" />
                                                                 </MultiBinding>
                                                             </Image.Source>
-                                                        </Image>
-                                                        <ProgressBar x:Name="Pb"
-                                                            Canvas.Bottom="0"
-                                                            Width="24" Height="14"
-                                                            IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}"
-                                                            ToolTipService.ShowDuration="60000">
-                                                            <ProgressBar.Style>
-                                                                <Style BasedOn="{StaticResource ProgressBarStyle}" TargetType="ProgressBar">
+                                                            <Image.Style>
+                                                                <Style TargetType="Image">
                                                                     <Style.Triggers>
                                                                         <DataTrigger Binding="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" Value="true">
                                                                             <Setter Property="ToolTip">
@@ -152,8 +146,13 @@
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
-                                                            </ProgressBar.Style>
-                                                        </ProgressBar>
+                                                            </Image.Style>
+                                                        </Image>
+                                                        <ProgressBar x:Name="Pb"
+                                                            Canvas.Bottom="0"
+                                                            Width="24" Height="14"
+                                                            Style="{StaticResource ProgressBarStyle}"
+                                                            IsIndeterminate="{Binding Data.Active, Converter={StaticResource ReverseBooleanConverter}}" />
                                                         <TextBlock Text="{Binding FoundFiles.Count}"
                                                             Canvas.Left="2" Canvas.Bottom="2"
                                                             FontSize="8" />
@@ -347,7 +346,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBox Text="{Binding Data.DataSavePath}" IsReadOnly="True" />
@@ -364,42 +362,41 @@
                                     <TextBlock Text="KAYIT KLASÖRÜ" />
                                 </StackPanel>
                             </Button>
-                            <ListBox Grid.Row="1" Grid.ColumnSpan="2"
-                                Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                SelectedIndex="{Binding Data.Biçim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <ListBox.Resources>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate>
-                                                    <RadioButton Content="{TemplateBinding ContentPresenter.Content}"
-                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                        IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ListBox.Resources>
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBoxItem Content="ZIP"
-                                    VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                    IsSelected="True" ToolTip="Standart Sıkıştırma" />
-                                <ListBoxItem Content="LZMA ZIP"
-                                    VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                    ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
-                            </ListBox>
-                            <TextBlock TextTrimming="CharacterEllipsis"
-                                Grid.Row="2" Grid.ColumnSpan="2"
-                                VerticalAlignment="Center">
-                                <Run Text="{Binding Data.FileName}" Foreground="Red" />
-                                <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
-                            </TextBlock>
-                            <Button Grid.Row="3" Grid.ColumnSpan="2"
+                            <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="2">
+                                <ListBox Background="{x:Null}" BorderBrush="{x:Null}" SelectedIndex="{Binding Data.Biçim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.Resources>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <RadioButton Content="{TemplateBinding ContentPresenter.Content}"
+                                                            VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                            IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.Resources>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBoxItem Content="ZIP"
+                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                        IsSelected="True" ToolTip="Standart Sıkıştırma" />
+                                    <ListBoxItem Content="LZMA ZIP"
+                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                        ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
+                                </ListBox>
+                                <TextBlock TextTrimming="CharacterEllipsis"
+                                    Grid.Row="2" Grid.ColumnSpan="2"
+                                    VerticalAlignment="Center">
+                                    <Run Text="{Binding Data.FileName}" Foreground="Red" />
+                                    <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
+                                </TextBlock>
+                            </UniformGrid>
+                            <Button Grid.Row="2" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                                 Command="{Binding StartCompress}">
