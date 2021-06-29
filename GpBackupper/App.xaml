@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,Culture=neutral,PublicKeyToken=31bf3856ad364e35,processorArchitecture=MSIL;component/themes/Aero.NormalColor.xaml" />
                 <ResourceDictionary Source="/Extensions;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Extensions:StringNullableToBooleanConverter x:Key="StringNullableToBooleanConverter" />
             <Extensions:SystemFileIconConverter x:Key="SystemFileIconConverter" />
             <ObjectDataProvider x:Key="FolderDataProvider" IsAsynchronous="True">
                 <ObjectDataProvider.ObjectInstance>

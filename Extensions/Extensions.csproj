@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\FileExtToArchiveViewerContentCoverter.cs" />
+    <Compile Include="Converters\StringNullableToBooleanConverter.cs" />
     <Compile Include="GridViewSort.cs" />
     <Compile Include="ViewModel\ArchiveData.cs" />
     <Compile Include="ViewModel\CompressorView.cs" />

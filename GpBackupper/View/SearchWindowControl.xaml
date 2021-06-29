@@ -136,8 +136,18 @@
                                 <UniformGrid Columns="3">
                                     <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Grid.Row="3"
-                                        Width="100"
-                                        CharacterCasing="Lower" />
+                                        Width="90"
+                                        CharacterCasing="Lower">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SearchFileName, Converter={StaticResource StringNullableToBooleanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                                        <Setter Property="BorderBrush" Value="Green" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                     <TextBlock Text="AD" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </UniformGrid>
                             </GridViewColumn.Header>

@@ -88,7 +88,17 @@
                             <DataTemplate>
                                 <StackPanel DataContext="{Binding DataContext, ElementName=Grid}" Orientation="Horizontal">
                                     <TextBlock Text="DOSYA ADI" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding AramaMetni, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="22" />
+                                    <TextBox Text="{Binding AramaMetni, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="22">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AramaMetni, Converter={StaticResource StringNullableToBooleanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                                        <Setter Property="BorderBrush" Value="Green" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.HeaderTemplate>
