@@ -78,26 +78,26 @@ namespace Extensions
                 int heightInPixels = bitmapData.Height;
                 int widthInBytes = bitmapData.Width * bytesPerPixel;
                 byte* ptrFirstPixel = (byte*)bitmapData.Scan0;
-                Parallel.For(0, heightInPixels, y =>
-                {
-                    byte* currentLine = ptrFirstPixel + (y * bitmapData.Stride);
-                    for (int x = 0; x < widthInBytes; x += bytesPerPixel)
-                    {
-                        byte gray = (byte)((currentLine[x] * 0.299) + (currentLine[x + 1] * 0.587) + (currentLine[x + 2] * 0.114));
-                        if (grayscale)
-                        {
-                            currentLine[x] = gray;
-                            currentLine[x + 1] = gray;
-                            currentLine[x + 2] = gray;
-                        }
-                        else
-                        {
-                            currentLine[x] = (byte)(gray < bWthreshold ? 0 : 255);
-                            currentLine[x + 1] = (byte)(gray < bWthreshold ? 0 : 255);
-                            currentLine[x + 2] = (byte)(gray < bWthreshold ? 0 : 255);
-                        }
-                    }
-                });
+                _ = Parallel.For(0, heightInPixels, y =>
+                  {
+                      byte* currentLine = ptrFirstPixel + (y * bitmapData.Stride);
+                      for (int x = 0; x < widthInBytes; x += bytesPerPixel)
+                      {
+                          byte gray = (byte)((currentLine[x] * 0.299) + (currentLine[x + 1] * 0.587) + (currentLine[x + 2] * 0.114));
+                          if (grayscale)
+                          {
+                              currentLine[x] = gray;
+                              currentLine[x + 1] = gray;
+                              currentLine[x + 2] = gray;
+                          }
+                          else
+                          {
+                              currentLine[x] = (byte)(gray < bWthreshold ? 0 : 255);
+                              currentLine[x + 1] = (byte)(gray < bWthreshold ? 0 : 255);
+                              currentLine[x + 2] = (byte)(gray < bWthreshold ? 0 : 255);
+                          }
+                      }
+                  });
                 bitmap.UnlockBits(bitmapData);
             }
 
@@ -128,15 +128,15 @@ namespace Extensions
             {
                 try
                 {
-                    pendingQueue.TryDequeue(out path);
+                    _ = pendingQueue.TryDequeue(out path);
 
                     string[] files = Directory.GetFiles(path, pattern);
 
-                    Parallel.ForEach(files, x => filesNames.Add(x));
+                    _ = Parallel.ForEach(files, x => filesNames.Add(x));
 
                     string[] directories = Directory.GetDirectories(path);
 
-                    Parallel.ForEach(directories, (x) => pendingQueue.Enqueue(x));
+                    _ = Parallel.ForEach(directories, (x) => pendingQueue.Enqueue(x));
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -153,7 +153,7 @@ namespace Extensions
         public static string GetFileType(this string filename)
         {
             SHFILEINFO shinfo = new();
-            SHGetFileInfo
+            _ = SHGetFileInfo
                 (
                         filename,
                         FILE_ATTRIBUTE_NORMAL,
@@ -188,9 +188,9 @@ namespace Extensions
                     throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
                 }
 
-                Icon.FromHandle(shfi.hIcon);
+                _ = Icon.FromHandle(shfi.hIcon);
                 using Icon icon = (Icon)Icon.FromHandle(shfi.hIcon).Clone();
-                DestroyIcon(shfi.hIcon);
+                _ = DestroyIcon(shfi.hIcon);
                 BitmapSource bitmapsource = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 bitmapsource.Freeze();
                 return bitmapsource;
@@ -207,12 +207,12 @@ namespace Extensions
                 if (hIcon != IntPtr.Zero)
                 {
                     BitmapSource icon = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    hIcon.DestroyIcon();
+                    _ = hIcon.DestroyIcon();
                     icon.Freeze();
                     return icon;
                 }
 
-                hIcon.DestroyIcon();
+                _ = hIcon.DestroyIcon();
             }
 
             return null;
@@ -260,12 +260,12 @@ namespace Extensions
                 if (hIcon != IntPtr.Zero)
                 {
                     BitmapSource icon = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    hIcon.DestroyIcon();
+                    _ = hIcon.DestroyIcon();
                     icon.Freeze();
                     return icon;
                 }
 
-                hIcon.DestroyIcon();
+                _ = hIcon.DestroyIcon();
             }
 
             return null;

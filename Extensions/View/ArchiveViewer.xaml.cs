@@ -47,11 +47,11 @@ namespace Extensions
                             break;
                         }
                     }
-                    Process.Start($@"{Path.GetTempPath()}\{seçilidosya}");
+                    _ = Process.Start($@"{Path.GetTempPath()}\{seçilidosya}");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Dosya Açılamadı.\n" + ex.Message, "TAKVİM", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    _ = MessageBox.Show("Dosya Açılamadı.\n" + ex.Message, "TAKVİM", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }, parameter => true);
 

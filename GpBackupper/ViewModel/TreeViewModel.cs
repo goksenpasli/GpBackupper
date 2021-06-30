@@ -58,7 +58,7 @@ namespace GpBackupper
                     }
                     else
                     {
-                        MessageBox.Show("Klasörde Hiç Dosya Yok.", "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Information);
+                        _ = MessageBox.Show("Klasörde Hiç Dosya Yok.", "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }, parameter => true);

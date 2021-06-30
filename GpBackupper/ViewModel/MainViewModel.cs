@@ -20,6 +20,8 @@ namespace GpBackupper
 {
     public class MainViewModel : InpcBase
     {
+        private static Task task;
+
         public MainViewModel()
         {
             Data = new Data();
@@ -52,7 +54,7 @@ namespace GpBackupper
                     }
                     else
                     {
-                        Data.BackupFolders.Remove(data);
+                        _ = Data.BackupFolders.Remove(data);
                     }
                 }
             }, parameter => true);
@@ -61,7 +63,7 @@ namespace GpBackupper
              {
                  if (parameter is Data selecteditem)
                  {
-                     Data.BackupFolders.Remove(selecteditem);
+                     _ = Data.BackupFolders.Remove(selecteditem);
                  }
              }, parameter => true);
 
@@ -117,7 +119,7 @@ namespace GpBackupper
             {
                 if (parameter is Data data)
                 {
-                    Data.BackupExtensions.Remove(data);
+                    _ = Data.BackupExtensions.Remove(data);
                 }
             }, parameter => true);
 
@@ -155,52 +157,57 @@ namespace GpBackupper
 
         public void Compress(CompressorViewModel compressorViewModel)
         {
-            Task.Factory.StartNew(() =>
+            if (task?.IsCompleted == false)
             {
-                try
-                {
-                    Data.Active = false;
-                    Data.ProgressState = TaskbarItemProgressState.Normal;
-                    using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
-                    switch (Data.Biçim)
-                    {
-                        case 0:
-                            {
-                                using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
-                                WriteData(writer, compressorViewModel);
-                                break;
-                            }
+                System.Windows.MessageBox.Show("Başka Bir Görev Çalışıyor.", "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+            task = Task.Factory.StartNew(() =>
+              {
+                  try
+                  {
+                      Data.Active = false;
+                      Data.ProgressState = TaskbarItemProgressState.Normal;
+                      using FileStream stream = File.OpenWrite(compressorViewModel.CompressorView.KayıtYolu);
+                      switch (Data.Biçim)
+                      {
+                          case 0:
+                              {
+                                  using ZipWriter writer = new(stream, new ZipWriterOptions(CompressionType.Deflate) { UseZip64 = true, DeflateCompressionLevel = (SharpCompress.Compressors.Deflate.CompressionLevel)compressorViewModel.CompressorView.SıkıştırmaDerecesi });
+                                  WriteData(writer, compressorViewModel);
+                                  break;
+                              }
 
-                        case 1:
-                            {
-                                using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
-                                WriteData(writer, compressorViewModel);
-                                break;
-                            }
-                    }
-                    Data.Active = true;
-                }
-                catch (Exception Ex)
-                {
-                    Data.ProgressState = TaskbarItemProgressState.Error;
-                    Data.Active = true;
-                    System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(task =>
-            {
-                compressorViewModel.CompressorView.Dosyalar.Clear();
-                if (task.IsCompleted)
-                {
-                    if (Properties.Settings.Default.ShutDownMode == 1)
-                    {
-                        Shutdown.DoExitWin(Shutdown.EWX_SHUTDOWN);
-                    }
-                    if (Properties.Settings.Default.ShutDownMode == 2)
-                    {
-                        Shutdown.DoExitWin(Shutdown.EWX_REBOOT);
-                    }
-                }
-            });
+                          case 1:
+                              {
+                                  using IWriter writer = WriterFactory.Open(stream, ArchiveType.Zip, CompressionType.LZMA);
+                                  WriteData(writer, compressorViewModel);
+                                  break;
+                              }
+                      }
+                      Data.Active = true;
+                  }
+                  catch (Exception Ex)
+                  {
+                      Data.ProgressState = TaskbarItemProgressState.Error;
+                      Data.Active = true;
+                      _ = System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                  }
+              }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(task =>
+              {
+                  compressorViewModel.CompressorView.Dosyalar.Clear();
+                  if (task.IsCompleted)
+                  {
+                      if (Properties.Settings.Default.ShutDownMode == 1)
+                      {
+                          Shutdown.DoExitWin(Shutdown.EWX_SHUTDOWN);
+                      }
+                      if (Properties.Settings.Default.ShutDownMode == 2)
+                      {
+                          Shutdown.DoExitWin(Shutdown.EWX_REBOOT);
+                      }
+                  }
+              });
         }
 
         private bool ValidateExtensions(string documentExtensions)

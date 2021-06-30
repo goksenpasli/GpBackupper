@@ -36,20 +36,20 @@ namespace GpBackupper
 
             SearchComputerFiles = new RelayCommand<object>(parameter =>
             {
-                Task.Factory.StartNew(() =>
-                {
-                    Data.Active = false;
-                    FoundFiles = new ObservableCollection<Files>();
-                    foreach (string item in Data.SelectedDrive.DirSearch(parameter as string))
-                    {
-                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            Files file = new Files() { FileName = item, FileSize = new FileInfo(item).Length / 1024 };
-                            FoundFiles.Add(file);
-                        }));
-                    }
-                    Data.Active = true;
-                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+                _ = Task.Factory.StartNew(() =>
+                  {
+                      Data.Active = false;
+                      FoundFiles = new ObservableCollection<Files>();
+                      foreach (string item in Data.SelectedDrive.DirSearch(parameter as string))
+                      {
+                          _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                          {
+                              Files file = new Files() { FileName = item, FileSize = new FileInfo(item).Length / 1024 };
+                              FoundFiles.Add(file);
+                          }));
+                      }
+                      Data.Active = true;
+                  }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }, parameter => !string.IsNullOrEmpty(Data.SelectedDrive));
 
             SelectAllFiles = new RelayCommand<object>(parameter =>
