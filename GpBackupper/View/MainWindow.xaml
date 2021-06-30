@@ -362,7 +362,7 @@
                                     <TextBlock Text="KAYIT KLASÖRÜ" />
                                 </StackPanel>
                             </Button>
-                            <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="2">
+                            <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="3">
                                 <ListBox Background="{x:Null}" BorderBrush="{x:Null}" SelectedIndex="{Binding Data.Biçim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ListBox.Resources>
                                         <Style TargetType="{x:Type ListBoxItem}">
@@ -389,6 +389,11 @@
                                         VerticalAlignment="Center" VerticalContentAlignment="Center"
                                         ToolTip="Standart Sıkıştırmaya Nazaran Daha Kuvvetli Sıkıştırma" />
                                 </ListBox>
+                                <ComboBox SelectedIndex="{Binding Path=ShutDownMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={x:Static properties:Settings.Default}}" ToolTip="İşlem Bitince Yapılacak İşlem">
+                                    <ComboBoxItem Content="İŞLEM YOK" />
+                                    <ComboBoxItem Content="BİLGİSAYARI KAPAT" />
+                                    <ComboBoxItem Content="BİLGİSAYARI YENİDEN BAŞLAT" />
+                                </ComboBox>
                                 <TextBlock TextTrimming="CharacterEllipsis"
                                     Grid.Row="2" Grid.ColumnSpan="2"
                                     VerticalAlignment="Center">

@@ -85,5 +85,17 @@ namespace GpBackupper.Properties {
                 this["CustomExtensions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ShutDownMode {
+            get {
+                return ((int)(this["ShutDownMode"]));
+            }
+            set {
+                this["ShutDownMode"] = value;
+            }
+        }
     }
 }

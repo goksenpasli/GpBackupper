@@ -186,7 +186,21 @@ namespace GpBackupper
                     Data.Active = true;
                     System.Windows.MessageBox.Show(Ex.Message, "YEDEKLEYİCİ", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(_ => compressorViewModel.CompressorView.Dosyalar.Clear(), TaskScheduler.FromCurrentSynchronizationContext());
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(task =>
+            {
+                compressorViewModel.CompressorView.Dosyalar.Clear();
+                if (task.IsCompleted)
+                {
+                    if (Properties.Settings.Default.ShutDownMode == 1)
+                    {
+                        Shutdown.DoExitWin(Shutdown.EWX_SHUTDOWN);
+                    }
+                    if (Properties.Settings.Default.ShutDownMode == 2)
+                    {
+                        Shutdown.DoExitWin(Shutdown.EWX_REBOOT);
+                    }
+                }
+            });
         }
 
         private bool ValidateExtensions(string documentExtensions)

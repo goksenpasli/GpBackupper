@@ -73,6 +73,7 @@
     <Compile Include="Model\CommonFolders.cs" />
     <Compile Include="Model\Files.cs" />
     <Compile Include="ViewModel\SearchControlViewModel.cs" />
+    <Compile Include="ViewModel\Shutdown.cs" />
     <Compile Include="View\SearchWindowControl.xaml.cs">
       <DependentUpon>SearchWindowControl.xaml</DependentUpon>
     </Compile>
