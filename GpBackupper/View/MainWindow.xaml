@@ -52,32 +52,67 @@
                                     </Style>
                                 </ComboBox.Resources>
                                 <ComboBoxItem Tag="{Binding DocumentExtensions, Source={x:Static properties:Settings.Default}}">
-                                    <TextBlock>
-                                        <Run Text="BELGELER" Foreground="Red" />
-                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Height="16">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                    <Binding Source="Shell32.dll" />
+                                                    <Binding Source="114" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" VerticalAlignment="Center" />
+                                    </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding VideoExtensions, Source={x:Static properties:Settings.Default}}">
-                                    <TextBlock>
-                                        <Run Text="VİDEOLAR" Foreground="Red" />
-                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Height="16">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                    <Binding Source="Shell32.dll" />
+                                                    <Binding Source="115" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" VerticalAlignment="Center" />
+                                    </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding AudioExtensions, Source={x:Static properties:Settings.Default}}">
-                                    <TextBlock>
-                                        <Run Text="SESLER" Foreground="Red" />
-                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Height="16">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                    <Binding Source="Shell32.dll" />
+                                                    <Binding Source="116" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" VerticalAlignment="Center" />
+                                    </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding PictureExtensions, Source={x:Static properties:Settings.Default}}">
-                                    <TextBlock>
-                                        <Run Text="RESİMLER" Foreground="Red" />
-                                        <Run Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" />
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Height="16">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                    <Binding Source="Shell32.dll" />
+                                                    <Binding Source="117" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Text="{Binding Tag, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" VerticalAlignment="Center" />
+                                    </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem Tag="{Binding CustomExtensions, Source={x:Static properties:Settings.Default}}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="ÖZEL UZANTILAR" Foreground="Red" VerticalAlignment="Center" />
+                                        <Image Width="16" Height="16">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                    <Binding Source="Shell32.dll" />
+                                                    <Binding Source="19" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
                                         <TextBox Text="{Binding CustomExtensions, ValidatesOnDataErrors=True, Source={x:Static properties:Settings.Default}}" Width="100" ToolTip="Uzantı Boş Olmamalı Ve *. İle Başlamalıdır." />
                                     </StackPanel>
                                 </ComboBoxItem>
@@ -391,8 +426,32 @@
                                 </ListBox>
                                 <ComboBox SelectedIndex="{Binding Path=ShutDownMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={x:Static properties:Settings.Default}}" ToolTip="İşlem Bitince Yapılacak İşlem">
                                     <ComboBoxItem Content="İŞLEM YOK" />
-                                    <ComboBoxItem Content="BİLGİSAYARI KAPAT" />
-                                    <ComboBoxItem Content="BİLGİSAYARI YENİDEN BAŞLAT" />
+                                    <ComboBoxItem>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Width="16" Height="16">
+                                                <Image.Source>
+                                                    <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                        <Binding Source="Shell32.dll" />
+                                                        <Binding Source="27" />
+                                                    </MultiBinding>
+                                                </Image.Source>
+                                            </Image>
+                                            <TextBlock Text="BİLGİSAYARI KAPAT" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Width="16" Height="16">
+                                                <Image.Source>
+                                                    <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                        <Binding Source="Shell32.dll" />
+                                                        <Binding Source="44" />
+                                                    </MultiBinding>
+                                                </Image.Source>
+                                            </Image>
+                                            <TextBlock Text="BİLGİSAYARI YENİDEN BAŞLAT" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </ComboBoxItem>
                                 </ComboBox>
                                 <TextBlock TextTrimming="CharacterEllipsis"
                                     Grid.Row="2" Grid.ColumnSpan="2"
