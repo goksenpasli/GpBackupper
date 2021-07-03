@@ -32,7 +32,7 @@ namespace GpBackupper
                     compressorViewModel.CompressorView.Dosyalar.Add(item.FileName);
                 }
                 Compress(compressorViewModel);
-            }, parameter => !string.IsNullOrWhiteSpace(Data.DataSavePath) && FoundFiles.Any(z => z.IsChecked));
+            }, parameter => !string.IsNullOrWhiteSpace(Data.DataSavePath) && FoundFiles?.Any(z => z.IsChecked) == true);
 
             SearchComputerFiles = new RelayCommand<object>(parameter =>
             {
