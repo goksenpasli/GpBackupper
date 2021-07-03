@@ -118,24 +118,26 @@
                                 </ComboBoxItem>
                             </ComboBox>
                             <Extensions:ContentToggleButton Grid.Column="1" IsTabStop="False" OverContent="...">
-                                <GroupBox Header="UZANTILAR" Width="300">
-                                    <StackPanel>
-                                        <HeaderedContentControl Header="VİDEOLAR">
-                                            <TextBox Text="{Binding VideoExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
-                                        </HeaderedContentControl>
-                                        <HeaderedContentControl Header="SESLER">
-                                            <TextBox Text="{Binding AudioExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
-                                        </HeaderedContentControl>
-                                        <HeaderedContentControl Header="BELGELER">
-                                            <TextBox Text="{Binding DocumentExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
-                                        </HeaderedContentControl>
-                                        <HeaderedContentControl Header="RESİMLER">
-                                            <TextBox Text="{Binding PictureExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
-                                        </HeaderedContentControl>
-                                        <Button Content="GÜNCELLE" Command="{Binding UpdateBuildInFileExtension, Mode=OneWay}" />
-                                        <Button Content="SIFIRLA" Command="{Binding ResetBuildInFileExtension, Mode=OneWay}" />
-                                    </StackPanel>
-                                </GroupBox>
+                                <Extensions:ResizablePanel Width="300" MinWidth="300">
+                                    <GroupBox Header="UZANTILAR">
+                                        <StackPanel>
+                                            <HeaderedContentControl Header="VİDEOLAR">
+                                                <TextBox Text="{Binding VideoExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                            </HeaderedContentControl>
+                                            <HeaderedContentControl Header="SESLER">
+                                                <TextBox Text="{Binding AudioExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                            </HeaderedContentControl>
+                                            <HeaderedContentControl Header="BELGELER">
+                                                <TextBox Text="{Binding DocumentExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                            </HeaderedContentControl>
+                                            <HeaderedContentControl Header="RESİMLER">
+                                                <TextBox Text="{Binding PictureExtensions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+                                            </HeaderedContentControl>
+                                            <Button Content="GÜNCELLE" Command="{Binding UpdateBuildInFileExtension, Mode=OneWay}" />
+                                            <Button Content="SIFIRLA" Command="{Binding ResetBuildInFileExtension, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </GroupBox>
+                                </Extensions:ResizablePanel>
                             </Extensions:ContentToggleButton>
                             <Button Content="LİSTEYE EKLE"
                                 Grid.Column="2"
@@ -194,7 +196,9 @@
                                                     </Canvas>
                                                 </Extensions:ContentToggleButton.OverContent>
                                                 <Extensions:ContentToggleButton.Content>
-                                                    <local:SearchWindowControl Width="450" Height="350" />
+                                                    <Extensions:ResizablePanel Width="450" Height="350" MinWidth="450" MinHeight="350">
+                                                        <local:SearchWindowControl />
+                                                    </Extensions:ResizablePanel>
                                                 </Extensions:ContentToggleButton.Content>
                                             </Extensions:ContentToggleButton>
                                             <Canvas Width="32" Height="32">
@@ -320,11 +324,10 @@
                                                             </MultiBinding>
                                                         </Image.Source>
                                                     </Image>
-                                                    <ProgressBar Grid.Column="1"
+                                                    <ProgressBar Grid.Column="0"
                                                         Height="32"
-                                                        Foreground="{StaticResource PinkProgressBackground}"
-                                                        BorderBrush="Transparent"
-                                                        Margin="-2"
+                                                        Foreground="{StaticResource BitmapCachedFlag}"
+                                                        BorderBrush="Green"
                                                         Style="{StaticResource ProgressBarStyle}"
                                                         Maximum="1" Orientation="Vertical"
                                                         Value="{Binding Data.Oran}" />
