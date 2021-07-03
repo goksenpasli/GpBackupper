@@ -218,6 +218,38 @@ namespace Extensions
             return null;
         }
 
+        public static void OpenFolderAndSelectItem(string folderPath, string file)
+        {
+            SHParseDisplayName(folderPath, IntPtr.Zero, out IntPtr nativeFolder, 0, out _);
+
+            if (nativeFolder == IntPtr.Zero)
+            {
+                // Log error, can't find folder
+                return;
+            }
+
+            SHParseDisplayName(Path.Combine(folderPath, file), IntPtr.Zero, out IntPtr nativeFile, 0, out _);
+
+            IntPtr[] fileArray;
+            if (nativeFile == IntPtr.Zero)
+            {
+                // Open the folder without the file selected if we can't find the file
+                fileArray = new IntPtr[0];
+            }
+            else
+            {
+                fileArray = new IntPtr[] { nativeFile };
+            }
+
+            _ = SHOpenFolderAndSelectItems(nativeFolder, (uint)fileArray.Length, fileArray, 0);
+
+            Marshal.FreeCoTaskMem(nativeFolder);
+            if (nativeFile != IntPtr.Zero)
+            {
+                Marshal.FreeCoTaskMem(nativeFile);
+            }
+        }
+
         public static BitmapSource RegistryIconCreate(this string value)
         {
             if (value != null)
@@ -297,6 +329,12 @@ namespace Extensions
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, out SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
 
+        [DllImport("shell32.dll", SetLastError = true)]
+        public static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, uint cidl, [In, MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl, uint dwFlags);
+
+        [DllImport("shell32.dll", SetLastError = true)]
+        public static extern void SHParseDisplayName([MarshalAs(UnmanagedType.LPWStr)] string name, IntPtr bindingContext, [Out] out IntPtr pidl, uint sfgaoIn, [Out] out uint psfgaoOut);
+
         public static BitmapImage ToBitmapImage(this Image bitmap, ImageFormat format, double decodeheight = 0)
         {
             if (bitmap != null)
@@ -373,6 +411,6 @@ namespace Extensions
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
             public string szTypeName;
-        };
+        }
     }
 }

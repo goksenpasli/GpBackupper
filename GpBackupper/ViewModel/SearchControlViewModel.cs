@@ -44,7 +44,7 @@ namespace GpBackupper
                       {
                           _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                           {
-                              Files file = new Files() { FileName = item, FileSize = new FileInfo(item).Length / 1024 };
+                              Files file = new() { FileName = item, FileSize = new FileInfo(item).Length / 1024 };
                               FoundFiles.Add(file);
                           }));
                       }

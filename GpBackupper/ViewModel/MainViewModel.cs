@@ -91,6 +91,8 @@ namespace GpBackupper
 
             OpenFile = new RelayCommand<object>(parameter => Process.Start(parameter as string), parameter => true);
 
+            ExploreFile = new RelayCommand<object>(parameter => ExtensionMethods.OpenFolderAndSelectItem(Path.GetDirectoryName(parameter as string), Path.GetFileName(parameter as string)), parameter => true);
+
             StartCompress = new RelayCommand<object>(parameter =>
             {
                 IEnumerable<string> backupfolders = Data.BackupFolders.Select(z => z.FolderName);
@@ -140,6 +142,8 @@ namespace GpBackupper
         public ICommand AddCommonFoldersBackupFolder { get; }
 
         public Data Data { get; set; }
+
+        public ICommand ExploreFile { get; }
 
         public ICommand OpenFile { get; }
 

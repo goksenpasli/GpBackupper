@@ -98,6 +98,7 @@
                                     <Border Background="{TemplateBinding Background}">
                                         <Border.InputBindings>
                                             <MouseBinding Command="{Binding OpenFile, Mode=OneWay}" CommandParameter="{Binding FileName, Mode=OneWay}" MouseAction="LeftDoubleClick" />
+                                            <MouseBinding Command="{Binding ExploreFile, Mode=OneWay}" CommandParameter="{Binding FileName, Mode=OneWay}" Gesture="CTRL+LeftClick" />
                                         </Border.InputBindings>
                                         <GridViewRowPresenter Content="{TemplateBinding Content}"
                                             Margin="0" HorizontalAlignment="Stretch"
