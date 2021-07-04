@@ -228,7 +228,7 @@
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <Extensions:VirtualizingWrapPanel ItemHeight="64" ItemWidth="360" />
+                                        <UniformGrid Columns="2" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
