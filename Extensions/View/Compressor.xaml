@@ -213,7 +213,9 @@
                     <TextBlock Text="ARŞİV İÇERİK GÖR" Visibility="{Binding ElementVisible}" VerticalAlignment="Center" />
                 </StackPanel>
                 <local:SplitButton.InternalContent>
-                    <local:ArchiveViewer Width="520" Height="250" ArchivePath="{Binding CompressorView.ArşivDosyaYolu}" />
+                    <local:ResizablePanel Width="520" Height="250" MinWidth="520" MinHeight="250">
+                        <local:ArchiveViewer ArchivePath="{Binding CompressorView.ArşivDosyaYolu}" />
+                    </local:ResizablePanel>
                 </local:SplitButton.InternalContent>
             </local:SplitButton>
         </UniformGrid>

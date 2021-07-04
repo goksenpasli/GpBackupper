@@ -24,11 +24,6 @@
     <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD" />
     <local:FilePathToIconConverter x:Key="FilePathToIconConverter" />
     <StreamGeometry x:Key="ArrowGeometry">M0,0L4,4 8,0z</StreamGeometry>
-    <LinearGradientBrush x:Key="PinkProgressBackground" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="0" Color="#FFD82E83" />
-        <GradientStop Offset="1" Color="#FFD82E83" />
-        <GradientStop Offset="0.5" Color="#FFE83A92" />
-    </LinearGradientBrush>
     <Style x:Key="ProgressBarStyle" TargetType="{x:Type ProgressBar}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="#888888" />
@@ -1102,10 +1097,11 @@
     </Style>
     <Style TargetType="local:ResizablePanel">
         <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:ResizablePanel">
-                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                    <Grid Background="{TemplateBinding Background}" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="5" />
                             <ColumnDefinition Width="*" />
