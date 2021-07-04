@@ -1083,6 +1083,7 @@
         </Setter>
     </Style>
     <Style TargetType="local:Resizer">
+        <Setter Property="BorderBrush" Value="Gray" />
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush MappingMode="RelativeToBoundingBox" StartPoint="0.5,0" EndPoint="0.5,1">
@@ -1094,16 +1095,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:Resizer">
-                    <Border Background="{TemplateBinding Panel.Background}" BorderBrush="{TemplateBinding Border.BorderBrush}" BorderThickness="{TemplateBinding Border.BorderThickness}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" BorderThickness="0,0,1,1" />
-                            <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                                BorderThickness="0,0,1,1"
-                                Margin="1,1,1,1" />
-                            <Border Background="{TemplateBinding Panel.Background}" Margin="2,2,2,2" />
-                        </Grid>
-                    </Border>
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,1,1" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
