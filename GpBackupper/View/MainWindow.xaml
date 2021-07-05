@@ -117,7 +117,11 @@
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
-                            <Extensions:ContentToggleButton Grid.Column="1" IsTabStop="False" OverContent="...">
+                            <Button Content="LİSTEYE EKLE"
+                                Grid.Column="1"
+                                Command="{Binding AddBackupFileExtensions}"
+                                CommandParameter="{Binding SelectedItem.Tag, ElementName=Cb}" />
+                            <Extensions:ContentToggleButton Grid.Column="2" IsTabStop="False" OverContent="...">
                                 <Extensions:ResizablePanel Width="300" MinWidth="300">
                                     <GroupBox Header="UZANTILAR">
                                         <StackPanel>
@@ -139,10 +143,6 @@
                                     </GroupBox>
                                 </Extensions:ResizablePanel>
                             </Extensions:ContentToggleButton>
-                            <Button Content="LİSTEYE EKLE"
-                                Grid.Column="2"
-                                Command="{Binding AddBackupFileExtensions}"
-                                CommandParameter="{Binding SelectedItem.Tag, ElementName=Cb}" />
                             <ListBox Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding Data.BackupExtensions}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -459,8 +459,8 @@
                                 <TextBlock TextTrimming="CharacterEllipsis"
                                     Grid.Row="2" Grid.ColumnSpan="2"
                                     VerticalAlignment="Center">
-                                    <Run Text="{Binding Data.FileName}" Foreground="Red" />
                                     <Run Text="{Binding Data.FileSize}" Foreground="Blue" />
+                                    <Run Text="{Binding Data.FileName}" Foreground="Red" />
                                 </TextBlock>
                             </UniformGrid>
                             <Button Grid.Row="2" Grid.ColumnSpan="2"
