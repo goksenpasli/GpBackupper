@@ -5,6 +5,7 @@ using SharpCompress.Writers;
 using SharpCompress.Writers.Zip;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace GpBackupper
     public class MainViewModel : InpcBase
     {
         private static Task task;
+
+        private ObservableCollection<string> files;
 
         public MainViewModel()
         {
@@ -98,19 +101,19 @@ namespace GpBackupper
                 IEnumerable<string> backupfolders = Data.BackupFolders.Select(z => z.FolderName);
                 IEnumerable<string> backupextensions = Data.BackupExtensions.Select(z => z.Extension);
                 string savefolderpath = Data.DataSavePath;
-                List<string> files = new();
+                Files = new();
                 foreach (string folder in backupfolders)
                 {
                     foreach (string item in folder.FilterFiles(backupextensions.ToArray()))
                     {
-                        files.Add(item);
+                        Files.Add(item);
                     }
                 }
 
                 CompressorViewModel compressorViewModel = new();
                 compressorViewModel.CompressorView.Dosyalar = new();
                 compressorViewModel.CompressorView.KayıtYolu = $@"{savefolderpath}\{Guid.NewGuid()}.zip";
-                foreach (string item in files)
+                foreach (string item in Files)
                 {
                     compressorViewModel.CompressorView.Dosyalar.Add(item);
                 }
@@ -144,6 +147,20 @@ namespace GpBackupper
         public Data Data { get; set; }
 
         public ICommand ExploreFile { get; }
+
+        public ObservableCollection<string> Files
+        {
+            get => files;
+
+            set
+            {
+                if (files != value)
+                {
+                    files = value;
+                    OnPropertyChanged(nameof(Files));
+                }
+            }
+        }
 
         public ICommand OpenFile { get; }
 

@@ -44,7 +44,7 @@ namespace Extensions
             }
             if (Files?.Any() == true)
             {
-                double max = Files.Max(z => new FileInfo(z).Length);
+                double max = Files.Max(z => new FileInfo(z).Length);//should be taken from here
                 Pen pen = new(Brush, ActualWidth / Files.Count);
                 pen.Freeze();
                 for (int i = 0; i < Files.Count; i++)
