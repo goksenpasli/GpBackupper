@@ -463,11 +463,11 @@
                                     <Run Text="{Binding Data.FileName}" Foreground="Red" />
                                 </TextBlock>
                             </UniformGrid>
-                            <Button Grid.Row="2" Grid.ColumnSpan="2"
+                            <Extensions:SplitButton Grid.Row="2" Grid.ColumnSpan="2"
                                 IsEnabled="{Binding Data.Active}"
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                                 Command="{Binding StartCompress}">
-                                <Button.Content>
+                                <Extensions:SplitButton.Content>
                                     <Grid>
                                         <ProgressBar Foreground="{StaticResource BitmapCachedFlag}"
                                             Style="{StaticResource ProgressBarStyle}"
@@ -477,8 +477,13 @@
                                             HorizontalAlignment="Center" VerticalAlignment="Center"
                                             FontSize="20" />
                                     </Grid>
-                                </Button.Content>
-                            </Button>
+                                </Extensions:SplitButton.Content>
+                                <Extensions:SplitButton.InternalContent>
+                                    <GroupBox Header="DOSYA BOYUT ANALİZİ">
+                                        <Extensions:FileGraphControl Width="640" Height="480" Files="{Binding Files}" />
+                                    </GroupBox>
+                                </Extensions:SplitButton.InternalContent>
+                            </Extensions:SplitButton>
                         </Grid>
                     </GroupBox>
                 </Grid>

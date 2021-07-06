@@ -512,7 +512,9 @@
                         Padding="{TemplateBinding Padding}"
                         Command="{TemplateBinding Command}"
                         CommandParameter="{TemplateBinding CommandParameter}">
-                        <Grid Width="{Binding RenderSize.Width, RelativeSource={RelativeSource AncestorType=Button}}" HorizontalAlignment="Center">
+                        <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:SplitButton}, Path=ActualWidth}"
+                            Height="{Binding RelativeSource={RelativeSource AncestorType=local:SplitButton}, Path=RenderSize.Height}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="14" />
