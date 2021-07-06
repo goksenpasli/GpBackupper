@@ -502,6 +502,8 @@
     </Style>
     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="local:SplitButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:SplitButton">
@@ -510,20 +512,17 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                         Command="{TemplateBinding Command}"
                         CommandParameter="{TemplateBinding CommandParameter}">
-                        <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:SplitButton}, Path=ActualWidth}"
-                            Height="{Binding RelativeSource={RelativeSource AncestorType=local:SplitButton}, Path=RenderSize.Height}"
-                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="14" />
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter Content="{TemplateBinding Content}"
-                                Grid.Column="0"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            <ToggleButton x:Name="Tb" Grid.Column="1" Background="Transparent">
+                            <ContentPresenter Content="{TemplateBinding Content}" Grid.Column="0" />
+                            <ToggleButton x:Name="Tb" IsEnabled="{TemplateBinding SplitContentPartIsEnabled}" Grid.Column="1" Background="Transparent">
                                 <ToggleButton.Style>
                                     <Style TargetType="{x:Type ToggleButton}">
                                         <Setter Property="FocusVisualStyle">
