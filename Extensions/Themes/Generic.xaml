@@ -523,27 +523,21 @@
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Content="{TemplateBinding Content}" Grid.Column="0" />
                             <ToggleButton x:Name="Tb" Grid.Column="1" IsEnabled="{TemplateBinding SplitContentPartIsEnabled}">
-                                <ToggleButton.Style>
-                                    <Style TargetType="{x:Type ToggleButton}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type ButtonBase}">
-                                                    <Path x:Name="path"
-                                                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                        Data="{StaticResource ArrowGeometry}"
-                                                        Fill="Black" Focusable="False" />
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsEnabled" Value="False">
-                                                            <Setter TargetName="path" Property="Fill" Value="#FFF4F4F4" />
-                                                            <Setter TargetName="path" Property="Fill" Value="#FFADB2B5" />
-                                                            <Setter Property="Foreground" Value="#FF838383" />
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ToggleButton.Style>
+                                <Path x:Name="path"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Data="{StaticResource ArrowGeometry}"
+                                    Focusable="False">
+                                    <Path.Style>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Fill" Value="Black" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Fill" Value="#FF838383" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Path.Style>
+                                </Path>
                             </ToggleButton>
                             <Popup x:Name="PART_Popup"
                                 Grid.ColumnSpan="2"
