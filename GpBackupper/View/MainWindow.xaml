@@ -117,10 +117,19 @@
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
-                            <Button Content="LİSTEYE EKLE"
-                                Grid.Column="1"
-                                Command="{Binding AddBackupFileExtensions}"
-                                CommandParameter="{Binding SelectedItem.Tag, ElementName=Cb}" />
+                            <Button Grid.Column="1" Command="{Binding AddBackupFileExtensions}" CommandParameter="{Binding SelectedItem.Tag, ElementName=Cb}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="16" Height="16">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{StaticResource SystemFileIconConverter}">
+                                                <Binding Source="Shell32.dll" />
+                                                <Binding Source="144" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
+                                    <TextBlock Text="LİSTEYE EKLE" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
                             <Extensions:ContentToggleButton Grid.Column="2" IsTabStop="False" OverContent="...">
                                 <Extensions:ResizablePanel Width="300" MinWidth="300">
                                     <GroupBox Header="UZANTILAR">

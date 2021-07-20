@@ -138,10 +138,7 @@
                         <GridViewColumn Width="300" Extensions:GridViewSort.PropertyName="FileName" DisplayMemberBinding="{Binding FileName}">
                             <GridViewColumn.Header>
                                 <UniformGrid Columns="3">
-                                    <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        Grid.Row="3"
-                                        Width="90"
-                                        CharacterCasing="Lower">
+                                    <TextBox Text="{Binding SearchFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="90" CharacterCasing="Lower">
                                         <TextBox.Style>
                                             <Style TargetType="TextBox">
                                                 <Style.Triggers>

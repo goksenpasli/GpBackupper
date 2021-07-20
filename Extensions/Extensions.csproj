@@ -51,7 +51,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\MaskedTextBlock.cs" />
     <Compile Include="Converters\FileExtToArchiveViewerContentCoverter.cs" />
+    <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="Converters\StringNullableToBooleanConverter.cs" />
     <Compile Include="Controls\FileGraphControl.cs" />
     <Compile Include="GridViewSort.cs" />
